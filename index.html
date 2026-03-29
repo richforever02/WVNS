@@ -425,7 +425,34 @@
             else document.getElementById('inputCard').classList.remove('rim-alert');
         }
 
-        document.getElementById('auditBtn').addEventListener('click', () => {
+        // Manual Sync logic updated to use orientation
+        async function readOrientationOnce() {
+            const getHeading = (e) => {
+                let h = e.webkitCompassHeading || (360 - e.alpha);
+                if (h !== undefined) {
+                    aziInput.value = h.toFixed(1);
+                    updateCalculations();
+                    window.removeEventListener('deviceorientation', getHeading, true);
+                }
+            };
+
+            // Request permission for iOS
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                try {
+                    const permission = await DeviceOrientationEvent.requestPermission();
+                    if (permission === 'granted') {
+                        window.addEventListener('deviceorientation', getHeading, true);
+                    }
+                } catch (e) { console.error(e); }
+            } else {
+                window.addEventListener('deviceorientation', getHeading, true);
+            }
+        }
+
+        document.getElementById('auditBtn').addEventListener('click', async () => {
+            // Read hardware orientation on sync
+            await readOrientationOnce();
+            
             playPing();
             document.getElementById('scanningOverlay').classList.remove('hidden');
             setTimeout(() => document.getElementById('scanningOverlay').classList.add('hidden'), 800);
@@ -438,14 +465,24 @@
                 if (res === 'granted') toggleCompass();
             } else toggleCompass();
         });
+
         function toggleCompass() {
             compassActive = !compassActive;
             const btn = document.getElementById('syncCompassBtn');
             btn.innerText = compassActive ? "STOP" : "COMPASS";
-            if (compassActive) window.addEventListener('deviceorientation', e => {
-                let h = e.webkitCompassHeading || (360 - e.alpha);
-                aziInput.value = h.toFixed(1); updateCalculations();
-            }, true);
+            if (compassActive) {
+                window.addEventListener('deviceorientation', handleContinuousCompass, true);
+            } else {
+                window.removeEventListener('deviceorientation', handleContinuousCompass, true);
+            }
+        }
+
+        function handleContinuousCompass(e) {
+            let h = e.webkitCompassHeading || (360 - e.alpha);
+            if (h !== undefined) {
+                aziInput.value = h.toFixed(1); 
+                updateCalculations();
+            }
         }
 
         document.getElementById('toggleLume').addEventListener('click', () => document.body.classList.toggle('tactical-red'));
