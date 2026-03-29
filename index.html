@@ -3,42 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>WVNS CORE v1.8 | PIC Audit Integration</title>
+    <title>WVNS SUITE v2.0 | Absolute Geodetic Suite</title>
     
-    <!-- iOS Web App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="WVNS CORE">
+    <meta name="apple-mobile-web-app-title" content="WVNS SUITE">
     
-    <!-- PWA Manifest for Android/Chrome -->
-    <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIldWTlMgQ29yZSBOYXZpZ2F0aW9uIiwKICAic2hvcnRfbmFtZSI6ICJXVk5TIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMjA2MTciLAogICJ0aGVtZV9jb2xvciI6ICIjMDIwNjE3Igp9">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'JetBrains Mono', monospace;
-            background-color: #020617; /* slate-950 */
-            color: #e2e8f0; /* slate-200 */
+            background-color: #020617;
+            color: #e2e8f0;
             -webkit-overflow-scrolling: touch;
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
         }
         .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.4); }
-        .glow-green { text-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
-        .glow-yellow { text-shadow: 0 0 10px rgba(234, 179, 8, 0.5); }
-        .glow-red { text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+        .glow-red { text-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
+        .rim-alert { border-color: #ef4444 !important; box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.1); }
         
         input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .hidden-page { display: none !important; }
-        .active-nav {
-            color: #3b82f6;
-            border-bottom: 2px solid #3b82f6;
-        }
+        .active-nav { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
+        
         @keyframes scan {
             0% { transform: translateY(-100%); opacity: 0; }
             50% { opacity: 1; }
@@ -49,448 +39,351 @@
             background: linear-gradient(90deg, transparent, #3b82f6, transparent);
             animation: scan 1.5s linear infinite;
         }
-        button, input { touch-action: manipulation; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 selection:bg-blue-500/30">
 
     <!-- Header -->
-    <header class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center mb-4 border-b border-slate-800 pb-6 gap-4">
+    <header class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-6 border-b border-slate-800 pb-6 gap-4">
         <div class="flex items-center gap-4">
-            <div class="p-3 bg-blue-600 rounded-lg shadow-lg shadow-blue-500/20 text-white">
+            <div id="statusIcon" class="p-3 bg-blue-600 rounded-lg shadow-lg shadow-blue-500/20 text-white transition-colors duration-500">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             </div>
             <div>
-                <h1 class="text-xl font-black tracking-tighter text-white uppercase">WVNS_CORE_v1.8</h1>
-                <p class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">Structural Sync // PIC Audit System</p>
+                <h1 class="text-xl font-black tracking-tighter text-white uppercase">WVNS_SUITE_v2.0</h1>
+                <p id="systemMode" class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">Structural Suite // Active Sync</p>
             </div>
         </div>
         
         <nav class="flex gap-6 text-[10px] font-black uppercase tracking-widest">
-            <button id="navCalc" class="pb-2 transition-all active-nav">Terminal</button>
-            <button id="navInfo" class="pb-2 text-slate-500 hover:text-slate-300 transition-all">Documentation</button>
+            <button id="navCalc" class="pb-2 transition-all active-nav">Navigator</button>
+            <button id="navInfo" class="pb-2 text-slate-500 hover:text-slate-300 transition-all">Doc</button>
         </nav>
 
-        <div class="hidden md:flex gap-4">
-            <div class="text-[10px] bg-slate-900 border border-slate-800 px-3 py-1 rounded">
-                RADIUS_CONSTANT: <span class="text-blue-400">7768.0 MI</span>
-            </div>
-            <div class="text-[10px] bg-slate-900 border border-slate-800 px-3 py-1 rounded">
-                MASTER_STEP: <span class="text-blue-400">86.31 MI</span>
-            </div>
+        <div class="hidden lg:flex gap-4">
+            <div class="text-[10px] bg-slate-900 border border-slate-800 px-3 py-1 rounded">R_MAX: <span class="text-blue-400">7768.0</span></div>
+            <div class="text-[10px] bg-slate-900 border border-slate-800 px-3 py-1 rounded">MASTER_STEP: <span class="text-blue-400">86.31</span></div>
         </div>
     </header>
 
-    <!-- CALCULATION PAGE -->
-    <main id="calcPage" class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <!-- Left Column -->
+    <!-- NAVIGATION PAGE -->
+    <main id="calcPage" class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Input & Profile (Left) -->
         <div class="lg:col-span-4 space-y-6">
-            <section class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-2xl relative overflow-hidden">
+            <section id="inputCard" class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-2xl relative overflow-hidden transition-all duration-500">
                 <div id="scanningOverlay" class="absolute inset-0 bg-blue-500/5 hidden pointer-events-none">
                     <div class="scanner-line"></div>
                 </div>
                 
                 <h2 class="text-[10px] font-black mb-6 flex items-center gap-2 text-slate-500 uppercase tracking-widest">
                     <svg class="w-4 h-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
-                    Watcher Input
+                    Fix Entry
                 </h2>
                 <div class="space-y-6">
                     <div>
-                        <label class="block text-[10px] text-slate-500 mb-2 uppercase font-bold">Latitude Coordinate</label>
+                        <label class="block text-[10px] text-slate-500 mb-2 uppercase font-bold">Latitude Fix</label>
                         <div class="relative">
-                            <input 
-                                id="latInput"
-                                type="number" 
-                                pattern="[0-9]*"
-                                inputmode="decimal"
-                                value="32.0"
-                                placeholder="0.0"
-                                class="w-full bg-black border border-slate-700 rounded-lg p-4 text-3xl text-white outline-none focus:border-blue-500 font-black transition-all"
-                            />
+                            <input id="latInput" type="number" inputmode="decimal" value="32.0" class="w-full bg-black border border-slate-700 rounded-lg p-4 text-3xl text-white outline-none focus:border-blue-500 font-black transition-all" />
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-700 text-2xl font-bold">°</span>
                         </div>
                     </div>
-                    <button 
-                        id="auditBtn"
-                        class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all shadow-lg shadow-blue-900/20"
-                    >
-                        <span id="btnIcon">
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
-                        </span>
-                        PERFORM SYSTEM SYNC
-                    </button>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button id="auditBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-lg text-[10px] uppercase tracking-widest active:scale-95 transition-all">Sync Fix</button>
+                        <button id="logSyncBtn" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-3 rounded-lg text-[10px] uppercase tracking-widest active:scale-95 transition-all">Save to Log</button>
+                    </div>
                 </div>
             </section>
 
+            <!-- Dynamic Structural Profile SVG -->
             <section class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                <h3 class="text-[10px] font-black text-slate-400 mb-4 uppercase tracking-widest flex items-center gap-2">
-                    <svg class="w-4 h-4 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                    Coordinate Reference
+                <h3 class="text-[10px] font-black text-slate-500 mb-4 uppercase tracking-widest flex items-center gap-2">
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                    Structural Profile
                 </h3>
-                <div class="space-y-4 text-[11px] leading-relaxed">
-                    <div class="border-b border-slate-800 pb-3">
-                        <p id="guideLat" class="text-blue-400 font-bold mb-1 uppercase tracking-tighter">1. WVNS: 32.00°</p>
-                        <p class="text-slate-500 italic">Latitude: Your angle relative to the center pivot anchor.</p>
-                    </div>
-                    <div class="border-b border-slate-800 pb-3">
-                        <p id="guideR" class="text-blue-400 font-bold mb-1 uppercase tracking-tighter">2. R: 5004.5 MI</p>
-                        <p class="text-slate-500 italic">Radius: Distance derived from mapping latitude across 7,768 MI.</p>
-                    </div>
-                    <div>
-                        <p id="guideY" class="text-blue-400 font-bold mb-1 uppercase tracking-tighter">3. Y: 1726.5 MI</p>
-                        <p class="text-slate-500 italic">Altitude: Vault ceiling height derived via Volumetric Triangulation.</p>
-                    </div>
+                <div class="bg-black/40 rounded-lg p-4">
+                    <svg id="profileSVG" viewBox="0 0 400 150" class="w-full h-auto">
+                        <!-- Floor -->
+                        <line x1="20" y1="130" x2="380" y2="130" stroke="#1e293b" stroke-width="2" />
+                        <!-- Ceiling (Linear Slope) -->
+                        <line id="svgCeiling" x1="20" y1="30" x2="380" y2="130" stroke="#3b82f6" stroke-width="2" stroke-dasharray="4" />
+                        <!-- Markers -->
+                        <text x="15" y="145" fill="#475569" font-size="8">PIVOT (90°)</text>
+                        <text x="350" y="145" fill="#475569" font-size="8">RIM (0°)</text>
+                        <!-- Watcher Marker -->
+                        <g id="svgWatcher">
+                            <line id="svgVerticalFix" x1="200" y1="130" x2="200" y2="80" stroke="#3b82f6" stroke-width="1" stroke-dasharray="2" />
+                            <circle id="svgPointer" cx="200" cy="80" r="4" fill="#3b82f6" class="animate-pulse" />
+                        </g>
+                    </svg>
                 </div>
             </section>
         </div>
 
-        <!-- Right Column -->
+        <!-- Main Display (Middle/Right) -->
         <div class="lg:col-span-8 space-y-6">
             
-            <!-- Volumetric Vector -->
+            <!-- Absolute Metrics -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-                <div class="bg-slate-800/50 p-4 border-b border-slate-800 flex justify-between items-center text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                    <span>Absolute Volumetric Vector</span>
-                    <div class="flex items-center gap-2">
-                        <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                        <span class="text-blue-500">Live Sync</span>
-                    </div>
-                </div>
-                
                 <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center border-b border-slate-800/50">
-                    <div class="space-y-1">
-                        <p class="text-[10px] text-slate-500 font-black uppercase">Radial Distance (r)</p>
-                        <div class="flex items-baseline justify-center gap-1">
-                            <span id="valR" class="text-4xl font-black text-white">5004.48</span>
-                            <span class="text-xs font-bold text-slate-600">MI</span>
-                        </div>
-                    </div>
-                    <div class="scale-110 space-y-1">
-                        <p class="text-[10px] text-blue-400 font-black uppercase">Vault Altitude (Y)</p>
-                        <div class="flex items-baseline justify-center gap-1">
-                            <span id="valY" class="text-5xl font-black text-blue-500 glow-blue">1,725.68</span>
-                            <span class="text-xs font-bold text-blue-700">MI</span>
-                        </div>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-[10px] text-slate-500 font-black uppercase">Grid Sector</p>
-                        <div class="flex items-baseline justify-center gap-1">
-                            <span id="valSector" class="text-4xl font-black text-white">#58</span>
-                            <svg class="w-3 h-3 text-slate-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Position-In-Cell Audit Section -->
-                <div class="bg-black/20 p-8 border-b border-slate-800/50">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                            <svg class="w-4 h-4 text-slate-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-                            Position-In-Cell (PIC) Audit
-                        </h3>
-                        <div id="picStatusBadge" class="px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest border transition-colors">
-                            STATUS
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-                        <!-- Visual Seam Track -->
-                        <div class="space-y-3">
-                            <div class="flex justify-between text-[9px] text-slate-500 font-bold uppercase tracking-widest px-1">
-                                <span>Inner Seam</span>
-                                <span>86.31 MI</span>
-                                <span>Outer Seam</span>
-                            </div>
-                            <div class="h-4 w-full bg-slate-950 border border-slate-800 rounded-full relative overflow-hidden">
-                                <div class="absolute top-0 bottom-0 left-0 w-[11.5%] bg-red-500/20"></div>
-                                <div class="absolute top-0 bottom-0 right-0 w-[11.5%] bg-red-500/20"></div>
-                                <div class="absolute top-0 bottom-0 left-[11.5%] w-[23%] bg-yellow-500/20"></div>
-                                <div class="absolute top-0 bottom-0 right-[11.5%] w-[23%] bg-yellow-500/20"></div>
-                                <div class="absolute top-0 bottom-0 left-[34.5%] w-[31%] bg-green-500/20"></div>
-                                <div id="picMarker" class="absolute top-0 bottom-0 w-[4px] shadow-[0_0_8px_currentColor] transition-all rounded-full bg-white text-white z-10" style="left: 50%; transform: translateX(-50%);"></div>
-                            </div>
-                            <p id="picStatusDesc" class="text-[10px] text-slate-400 text-center font-mono h-4">Evaluating offset stability...</p>
-                        </div>
-                        
-                        <!-- Metric Grid -->
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="bg-black/50 p-3 rounded-lg border border-slate-800/80">
-                                <p class="text-[9px] text-slate-500 font-bold uppercase mb-1">Offset (r % 86.31)</p>
-                                <p id="valOffset" class="text-xl font-black text-white font-mono">0.00 <span class="text-[10px] text-slate-600">MI</span></p>
-                            </div>
-                            <div class="bg-black/50 p-3 rounded-lg border border-slate-800/80">
-                                <p class="text-[9px] text-slate-500 font-bold uppercase mb-1">Dist Inner Seam</p>
-                                <p id="valDistInner" class="text-xl font-black text-white font-mono">0.00 <span class="text-[10px] text-slate-600">MI</span></p>
-                            </div>
-                            <div class="bg-black/50 p-3 rounded-lg border border-slate-800/80 col-span-2">
-                                <p class="text-[9px] text-slate-500 font-bold uppercase mb-1">Dist Outer Seam</p>
-                                <p id="valDistOuter" class="text-xl font-black text-white font-mono">0.00 <span class="text-[10px] text-slate-600">MI</span></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Formal Sync Result Section -->
-                <div id="auditLogContainer" class="hidden px-8 pb-8">
-                    <div class="bg-black/80 border border-blue-900/50 p-6 rounded-lg font-mono text-[10px]">
-                        <div class="flex justify-between items-start border-b border-blue-900/30 pb-4 mb-4">
-                            <div>
-                                <h4 class="text-blue-400 font-black text-xs uppercase">Official Geodetic Sync Report</h4>
-                                <p class="text-slate-600">STABILITY BUILD 1.7 // FIELD AUDIT</p>
-                            </div>
-                            <p id="reportTime" class="text-right text-slate-600">--</p>
-                        </div>
-                        <div class="grid grid-cols-2 gap-y-2 text-slate-400">
-                            <span>LATITUDE INPUT:</span> <span id="logLat" class="text-white">--</span>
-                            <span>RADIAL OFFSET (r):</span> <span id="logR" class="text-white">--</span>
-                            <span>VAULT DEPTH (Y):</span> <span id="logY" class="text-white">--</span>
-                            <span>SECTOR ASSIGNMENT:</span> <span id="logSector" class="text-white">--</span>
-                            <span>RADIAL MODULO:</span> <span id="logOffset" class="text-white">--</span>
-                            <span>SEAM DISTANCE:</span> <span id="logSeamDist" class="text-white">--</span>
-                        </div>
-                        <div class="mt-6 pt-4 border-t border-blue-900/30 text-center">
-                            <p class="text-blue-500 font-black uppercase tracking-widest text-[10px]">Geodetic Sync: <span class="text-green-500 glow-green">LOCKED</span></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-black/50 p-6 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
-                </div>
-
-                <div class="bg-slate-950 p-6 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
                     <div>
-                        <p class="text-[9px] font-black text-slate-500 uppercase mb-1 flex items-center gap-1">
-                            <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            Transmittable Fix
-                        </p>
-                        <code id="logString" class="text-blue-400 font-bold text-sm tracking-wider">WVNS:32.00N | R:5004.5 | Y:1725.7</code>
+                        <p class="text-[10px] text-slate-500 font-black uppercase mb-1">Radial Distance (r)</p>
+                        <p id="valR" class="text-4xl font-black text-white">--</p>
                     </div>
-                    <button 
-                        id="copyBtn"
-                        class="px-6 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-[10px] font-black text-white flex items-center gap-2 transition-all uppercase"
-                    >
-                        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                        Copy Fix
-                    </button>
+                    <div>
+                        <p class="text-[10px] text-blue-400 font-black uppercase mb-1">Vault Altitude (Y)</p>
+                        <p id="valY" class="text-5xl font-black text-blue-500 glow-blue">--</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-500 font-black uppercase mb-1">Sector (PIC)</p>
+                        <p id="valSector" class="text-4xl font-black text-white">--</p>
+                    </div>
+                </div>
+
+                <!-- PIC Audit Panel -->
+                <div class="bg-black/20 p-6 border-b border-slate-800/50">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Structural Seam Proximity</span>
+                        <div id="picBadge" class="px-3 py-0.5 rounded text-[9px] font-black uppercase border">STATUS</div>
+                    </div>
+                    <div class="relative h-2 w-full bg-slate-950 rounded-full overflow-hidden mb-2">
+                        <div class="absolute inset-0 bg-gradient-to-r from-red-500/20 via-green-500/20 to-red-500/20"></div>
+                        <div id="picMarker" class="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_10px_white] transition-all duration-300" style="left: 50%"></div>
+                    </div>
+                    <div class="flex justify-between text-[9px] text-slate-600 font-bold">
+                        <span id="valInner">Inner: --</span>
+                        <span id="valOffset">Offset: --</span>
+                        <span id="valOuter">Outer: --</span>
+                    </div>
+                </div>
+
+                <!-- Route Planner Section -->
+                <div class="p-6 bg-slate-950/50">
+                    <h3 class="text-[10px] font-black text-slate-500 mb-4 uppercase tracking-[0.2em]">Volumetric Route Planner</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <input id="routeStart" type="number" placeholder="Start Lat" class="bg-black border border-slate-800 rounded p-3 text-xs font-bold outline-none focus:border-blue-500" />
+                        <input id="routeEnd" type="number" placeholder="End Lat" class="bg-black border border-slate-800 rounded p-3 text-xs font-bold outline-none focus:border-blue-500" />
+                        <button id="planRouteBtn" class="bg-slate-800 hover:bg-blue-600 text-white font-black rounded text-[10px] uppercase tracking-widest transition-all">Execute Plan</button>
+                    </div>
+                    <div id="routeResult" class="hidden bg-black border border-blue-900/30 p-4 rounded text-[10px] space-y-2 animate-in fade-in slide-in-from-top-2">
+                        <div class="flex justify-between border-b border-slate-800 pb-2">
+                            <span class="text-slate-500">Total Seams Crossed:</span>
+                            <span id="resSeams" class="text-blue-400 font-bold">--</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-800 pb-2">
+                            <span class="text-slate-500">Radial Span:</span>
+                            <span id="resSpan" class="text-white">-- MI</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Sector Handoffs:</span>
+                            <span id="resHandoffs" class="text-white">--</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- Field Log / History -->
+            <section class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+                <div class="p-4 border-b border-slate-800 bg-slate-800/20 flex justify-between items-center">
+                    <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        Digital Field Log
+                    </h3>
+                    <button id="clearLogBtn" class="text-[8px] text-slate-600 hover:text-red-400 uppercase font-black">Wipe Data</button>
+                </div>
+                <div class="max-h-[200px] overflow-y-auto custom-scrollbar">
+                    <table class="w-full text-[10px] text-left">
+                        <thead class="bg-black/40 text-slate-600 sticky top-0">
+                            <tr>
+                                <th class="p-3">LAT</th>
+                                <th class="p-3">RADIAL (r)</th>
+                                <th class="p-3">ALT (Y)</th>
+                                <th class="p-3">SECTOR</th>
+                                <th class="p-3 text-right">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logTableBody" class="divide-y divide-slate-800">
+                            <!-- Log rows injected here -->
+                        </tbody>
+                    </table>
+                    <div id="emptyLogMsg" class="p-10 text-center text-slate-700 italic text-[10px]">No field fixes logged for this session.</div>
+                </div>
+            </section>
         </div>
     </main>
 
-    <!-- DOCUMENTATION PAGE -->
-    <main id="infoPage" class="max-w-4xl mx-auto hidden-page space-y-12 py-10 px-4">
+    <!-- INFO PAGE -->
+    <main id="infoPage" class="max-w-4xl mx-auto hidden-page space-y-12 py-10">
         <section class="space-y-6">
-            <h2 class="text-3xl font-black text-white tracking-tighter border-l-4 border-blue-600 pl-6 uppercase">The Sync Protocol</h2>
-            <p class="text-slate-400 leading-relaxed">
-                The <span class="text-blue-400 font-bold">World Volumetric Navigation System (WVNS)</span> represents a foundational pivot in geodetic science. 
-                Instead of treating altitude as a variable height above sea level determined by barometric pressure or GPS trilateration, the WVNS identifies the <span class="text-white">Y-axis as a fixed physical constant</span>.
-            </p>
-            <p class="text-slate-400 leading-relaxed">
-                The terminal allows for instant synchronization between Watcher UI coordinates (Latitude) and the absolute structural dimensions of the vault utilizing Volumetric Triangulation.
-            </p>
+            <h2 class="text-3xl font-black text-white tracking-tighter border-l-4 border-blue-600 pl-6 uppercase">System Documentation</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-400 leading-relaxed">
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800">
+                    <h4 class="text-blue-400 font-black mb-2 uppercase">The Radial Slope</h4>
+                    <p>Unlike spherical models, the WVNS utilizes a constant slope derived from the Peak Vault Depth (5000mi) and the Maximum Radius (7768mi). This ensures vertical consistency is directly proportional to radial position.</p>
+                </div>
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800">
+                    <h4 class="text-blue-400 font-black mb-2 uppercase">The Southern Rim</h4>
+                    <p>Approaching 0° Latitude signals the transition to the Southern Rim—the edge of the primary geodetic containment. System alerts trigger within 10° of the rim due to structural compression.</p>
+                </div>
+            </div>
         </section>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl space-y-4">
-                <div class="text-blue-500 mb-4">
-                    <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg>
-                </div>
-                <h3 class="text-xl font-black text-white uppercase tracking-tighter">Geometric Constants</h3>
-                <p class="text-xs text-slate-500 leading-relaxed">
-                    By identifying the absolute Radius Constant as 7,768 miles, every coordinate possesses a mathematically predefined altitude calculated via the Master Formula: <code class="text-blue-400">Y = (7,768 - r) × tan(Latitude)</code>. This transforms navigation into a process of geometric auditing.
-                </p>
-            </div>
-            
-            <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl space-y-4">
-                <div class="text-blue-500 mb-4">
-                    <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
-                </div>
-                <h3 class="text-xl font-black text-white uppercase tracking-tighter">Sector Logic & PIC Audit</h3>
-                <p class="text-xs text-slate-500 leading-relaxed">
-                    The 364-cell grid establishes absolute volumetric sectors. Every 86.31 miles (The Master Step) defines a transition seam in the grid. Navigators calculate their "Offset" (<code class="text-blue-400">r MOD 86.31</code>) to monitor their proximity to a Structural Seam and determine when a Hardware Handoff is required.
-                </p>
-            </div>
-        </div>
-        
-        <div class="text-center pb-20 mt-12">
-            <button id="backToCalc" class="px-8 py-3 bg-blue-600 text-white font-black rounded-lg text-xs uppercase tracking-widest hover:bg-blue-500 transition-all">
-                Return to Terminal
-            </button>
-        </div>
+        <div class="text-center pb-20"><button id="backToCalc" class="px-8 py-3 bg-blue-600 text-white font-black rounded-lg text-xs uppercase hover:bg-blue-500 transition-all">Return to Suite</button></div>
     </main>
-
-    <footer class="max-w-6xl mx-auto mt-10 pt-6 border-t border-slate-900 opacity-30 flex justify-between items-center text-[9px] font-bold uppercase tracking-[0.3em] pb-8">
-        <span>WVNS Navigation Framework</span>
-        <span>Stability Build 1.8 // Field Auth</span>
-    </footer>
 
     <script>
-        // System Constants exactly as defined in WVNS documentation
+        // System Constants
         const R_MAX = 7768;
         const Y_PEAK = 5000;
         const MASTER_STEP = 86.31;
+        const systemSlope = Y_PEAK / R_MAX;
 
-        // UI Elements
-        const input = document.getElementById('latInput');
-        const auditBtn = document.getElementById('auditBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const navCalc = document.getElementById('navCalc');
-        const navInfo = document.getElementById('navInfo');
+        // State
+        let fieldLog = [];
+        let currentFix = { lat: 32, r: 0, y: 0, sector: 0 };
+
+        // UI Selectors
+        const latInput = document.getElementById('latInput');
         const calcPage = document.getElementById('calcPage');
         const infoPage = document.getElementById('infoPage');
-        const backToCalc = document.getElementById('backToCalc');
-        const scanningOverlay = document.getElementById('scanningOverlay');
-        const auditLogContainer = document.getElementById('auditLogContainer');
-
-        let currentR = 5004.48;
-        let currentY = 1725.68;
-        let currentSector = 59;
-        let currentLat = 32;
+        const logTableBody = document.getElementById('logTableBody');
+        const emptyLogMsg = document.getElementById('emptyLogMsg');
 
         function showPage(pageId) {
-            if (pageId === 'calc') {
-                calcPage.classList.remove('hidden-page');
-                infoPage.classList.add('hidden-page');
-                navCalc.classList.add('active-nav');
-                navCalc.classList.remove('text-slate-500');
-                navInfo.classList.remove('active-nav');
-                navInfo.classList.add('text-slate-500');
-            } else {
-                calcPage.classList.add('hidden-page');
-                infoPage.classList.remove('hidden-page');
-                navInfo.classList.add('active-nav');
-                navInfo.classList.remove('text-slate-500');
-                navCalc.classList.remove('active-nav');
-                navCalc.classList.add('text-slate-500');
-            }
-            window.scrollTo(0, 0);
+            calcPage.classList.toggle('hidden-page', pageId !== 'calc');
+            infoPage.classList.toggle('hidden-page', pageId !== 'info');
+            document.getElementById('navCalc').classList.toggle('active-nav', pageId === 'calc');
+            document.getElementById('navInfo').classList.toggle('active-nav', pageId === 'info');
+            window.scrollTo(0,0);
         }
-
-        navCalc.addEventListener('click', () => showPage('calc'));
-        navInfo.addEventListener('click', () => showPage('info'));
-        backToCalc.addEventListener('click', () => showPage('calc'));
 
         function updateCalculations() {
-            const rawVal = input.value === "" ? "0" : input.value;
-            let lat = parseFloat(rawVal);
-            if (isNaN(lat)) lat = 0;
+            let lat = parseFloat(latInput.value) || 0;
+            const clampedLat = Math.max(0, Math.min(90, Math.abs(lat)));
+            
+            // Core Logic (User Specified)
+            const r = ((90 - clampedLat) / 90) * R_MAX;
+            const y = Y_PEAK - (r * systemSlope);
+            const sector = Math.floor(r / MASTER_STEP) + 1;
+            const offset = r % MASTER_STEP;
 
-            const absLat = Math.abs(lat);
-            const clampedLat = Math.min(absLat, 90);
-            currentLat = clampedLat;
+            currentFix = { lat: clampedLat, r, y, sector, offset };
 
-            // Base Radial Distance (r)
-            currentR = ((90 - clampedLat) / 90) * R_MAX;
-            const systemSlope = Y_PEAK / R_MAX;
-            currentY = Y_PEAK - (currentR * systemSlope);
-            currentSector = Math.floor(currentR / MASTER_STEP) + 1;
+            // Update Metrics
+            document.getElementById('valR').innerText = r.toFixed(2);
+            document.getElementById('valY').innerText = y.toLocaleString(undefined, { maximumFractionDigits: 1 });
+            document.getElementById('valSector').innerText = `#${sector}`;
+            
+            // PIC Audit
+            const picBadge = document.getElementById('picBadge');
+            const picMarker = document.getElementById('picMarker');
+            const pct = (offset / MASTER_STEP) * 100;
+            picMarker.style.left = `${pct}%`;
 
-            // --- PIC AUDIT LOGIC ---
-            const offset = currentR % MASTER_STEP;
-            const distOuter = MASTER_STEP - offset;
-            const distInner = offset;
-
-            let statusBadgeClass = '';
-            let statusText = '';
-            let statusDesc = '';
-            let markerColorClass = '';
-
-            if (offset >= 30.0 && offset <= 56.0) {
-                statusText = 'GREEN (CENTERED)';
-                statusBadgeClass = 'bg-green-500/10 text-green-500 border-green-500/30';
-                statusDesc = 'Optimal stability. ~43 miles of range in either direction.';
-                markerColorClass = 'bg-green-400 text-green-400 glow-green';
-            } else if ((offset >= 10.0 && offset < 30.0) || (offset > 56.0 && offset <= 76.0)) {
-                statusText = 'YELLOW (CAUTION)';
-                statusBadgeClass = 'bg-yellow-500/10 text-yellow-500 border-yellow-500/30';
-                statusDesc = 'Approaching Seam. Prepare for recalibration within 10-20 miles.';
-                markerColorClass = 'bg-yellow-400 text-yellow-400 glow-yellow';
+            if (offset > 25 && offset < 61) {
+                picBadge.innerText = "NOMINAL";
+                picBadge.className = "px-3 py-0.5 rounded text-[9px] font-black uppercase border border-green-500 text-green-500 bg-green-500/10";
             } else {
-                statusText = 'RED (CRITICAL)';
-                statusBadgeClass = 'bg-red-500/10 text-red-500 border-red-500/30';
-                statusDesc = 'Proximity Alert! Within 10 miles of Structural Seam. Immediate sync required.';
-                markerColorClass = 'bg-red-500 text-red-500 glow-red';
+                picBadge.innerText = "SEAM ALERT";
+                picBadge.className = "px-3 py-0.5 rounded text-[9px] font-black uppercase border border-yellow-500 text-yellow-500 bg-yellow-500/10";
             }
 
-            document.getElementById('valR').innerText = currentR.toFixed(2);
-            document.getElementById('valY').innerText = currentY.toLocaleString(undefined, { maximumFractionDigits: 2 });
-            document.getElementById('valSector').innerText = '#' + currentSector;
-            
-            const picBadge = document.getElementById('picStatusBadge');
-            if (picBadge) {
-                picBadge.className = `px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest border transition-colors ${statusBadgeClass}`;
-                picBadge.innerText = statusText;
-                document.getElementById('picStatusDesc').innerText = statusDesc;
-                
-                document.getElementById('valOffset').innerText = offset.toFixed(2);
-                document.getElementById('valDistInner').innerText = distInner.toFixed(2);
-                document.getElementById('valDistOuter').innerText = distOuter.toFixed(2);
+            document.getElementById('valInner').innerText = `Inner: ${offset.toFixed(1)}`;
+            document.getElementById('valOffset').innerText = `Offset: ${offset.toFixed(2)}`;
+            document.getElementById('valOuter').innerText = `Outer: ${(MASTER_STEP - offset).toFixed(1)}`;
 
-                const markerPct = (offset / MASTER_STEP) * 100;
-                const picMarker = document.getElementById('picMarker');
-                picMarker.style.left = `${markerPct}%`;
-                picMarker.className = `absolute top-0 bottom-0 w-[4px] shadow-[0_0_8px_currentColor] transition-all rounded-full z-10 ${markerColorClass}`;
+            // Profile SVG Update
+            const xPos = 20 + ((clampedLat / 90) * 360); // Inverted for SVG (Pivot left)
+            const yPos = 130 - ((y / Y_PEAK) * 100);
+            document.getElementById('svgPointer').setAttribute('cx', xPos);
+            document.getElementById('svgPointer').setAttribute('cy', yPos);
+            document.getElementById('svgVerticalFix').setAttribute('x1', xPos);
+            document.getElementById('svgVerticalFix').setAttribute('x2', xPos);
+            document.getElementById('svgVerticalFix').setAttribute('y2', yPos);
+
+            // Rim Logic UI
+            const inputCard = document.getElementById('inputCard');
+            const statusIcon = document.getElementById('statusIcon');
+            const sysMode = document.getElementById('systemMode');
+            if (clampedLat < 10) {
+                inputCard.classList.add('rim-alert');
+                statusIcon.classList.replace('bg-blue-600', 'bg-red-600');
+                sysMode.innerText = "CRITICAL // RIM PROXIMITY";
+                sysMode.classList.replace('text-blue-400', 'text-red-500');
+            } else {
+                inputCard.classList.remove('rim-alert');
+                statusIcon.classList.replace('bg-red-600', 'bg-blue-600');
+                sysMode.innerText = "Structural Suite // Active Sync";
+                sysMode.classList.replace('text-red-500', 'text-blue-400');
             }
-            
-            const logString = `WVNS:${clampedLat.toFixed(2)}N | R:${currentR.toFixed(1)} | Y:${currentY.toFixed(1)}`;
-            document.getElementById('logString').innerText = logString;
-
-            auditLogContainer.classList.add('hidden');
         }
 
-        input.addEventListener('input', updateCalculations);
+        function planRoute() {
+            const start = parseFloat(document.getElementById('routeStart').value);
+            const end = parseFloat(document.getElementById('routeEnd').value);
+            if (isNaN(start) || isNaN(end)) return;
 
-        auditBtn.addEventListener('click', () => {
-            const btnIcon = document.getElementById('btnIcon');
-            const originalIcon = btnIcon.innerHTML;
+            const r1 = ((90 - Math.abs(start)) / 90) * R_MAX;
+            const r2 = ((90 - Math.abs(end)) / 90) * R_MAX;
             
-            scanningOverlay.classList.remove('hidden');
-            btnIcon.innerHTML = `<svg class="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
-            auditBtn.classList.add('opacity-80');
-            
-            setTimeout(() => {
-                btnIcon.innerHTML = originalIcon;
-                auditBtn.classList.remove('opacity-80');
-                scanningOverlay.classList.add('hidden');
-                
-                // Populate Log Metrics
-                const offset = currentR % MASTER_STEP;
-                const minDist = Math.min(offset, MASTER_STEP - offset);
+            const span = Math.abs(r1 - r2);
+            const s1 = Math.floor(r1 / MASTER_STEP);
+            const s2 = Math.floor(r2 / MASTER_STEP);
+            const seams = Math.abs(s1 - s2);
 
-                document.getElementById('reportTime').innerText = new Date().toISOString().replace('T', ' ').split('.')[0] + ' UTC';
-                document.getElementById('logLat').innerText = currentLat.toFixed(4) + '°';
-                document.getElementById('logR').innerText = currentR.toFixed(2) + ' MI';
-                document.getElementById('logY').innerText = currentY.toFixed(2) + ' MI';
-                document.getElementById('logSector').innerText = currentSector;
-                
-                if (document.getElementById('logOffset')) document.getElementById('logOffset').innerText = offset.toFixed(2) + ' MI';
-                if (document.getElementById('logSeamDist')) document.getElementById('logSeamDist').innerText = minDist.toFixed(2) + ' MI';
-                
-                auditLogContainer.classList.remove('hidden');
-                auditLogContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 1000);
-        });
+            document.getElementById('resSeams').innerText = seams;
+            document.getElementById('resSpan').innerText = span.toFixed(2) + " MI";
+            document.getElementById('resHandoffs').innerText = seams;
+            document.getElementById('routeResult').classList.remove('hidden');
+        }
 
-        copyBtn.addEventListener('click', () => {
-            const text = document.getElementById('logString').innerText;
+        function addToLog() {
+            fieldLog.unshift({...currentFix, id: Date.now()});
+            if (fieldLog.length > 20) fieldLog.pop();
+            renderLog();
+        }
+
+        function renderLog() {
+            emptyLogMsg.style.display = fieldLog.length ? 'none' : 'block';
+            logTableBody.innerHTML = fieldLog.map(item => `
+                <tr class="hover:bg-blue-500/5 transition-colors">
+                    <td class="p-3 font-bold text-white">${item.lat.toFixed(2)}°</td>
+                    <td class="p-3 text-slate-400">${item.r.toFixed(1)}</td>
+                    <td class="p-3 text-blue-400 font-bold">${item.y.toFixed(1)}</td>
+                    <td class="p-3 text-slate-400">#${item.sector}</td>
+                    <td class="p-3 text-right">
+                        <button onclick="copyEntry('${item.lat}')" class="text-blue-500 hover:text-white transition-colors">Copy</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.copyEntry = (lat) => {
+            const text = `WVNS Fix: ${lat}° | R:${currentFix.r.toFixed(1)} | Y:${currentFix.y.toFixed(1)}`;
             const el = document.createElement('textarea');
             el.value = text;
             document.body.appendChild(el);
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            
-            const originalText = copyBtn.innerHTML;
-            copyBtn.innerHTML = 'SYNC COPIED';
-            copyBtn.classList.add('bg-green-600', 'border-green-500');
-            setTimeout(() => {
-                copyBtn.innerHTML = originalText;
-                copyBtn.classList.remove('bg-green-600', 'border-green-500');
-            }, 1500);
+        };
+
+        // Listeners
+        latInput.addEventListener('input', updateCalculations);
+        document.getElementById('navCalc').addEventListener('click', () => showPage('calc'));
+        document.getElementById('navInfo').addEventListener('click', () => showPage('info'));
+        document.getElementById('backToCalc').addEventListener('click', () => showPage('calc'));
+        document.getElementById('planRouteBtn').addEventListener('click', planRoute);
+        document.getElementById('logSyncBtn').addEventListener('click', addToLog);
+        document.getElementById('clearLogBtn').addEventListener('click', () => { fieldLog = []; renderLog(); });
+        document.getElementById('auditBtn').addEventListener('click', () => {
+            document.getElementById('scanningOverlay').classList.remove('hidden');
+            setTimeout(() => document.getElementById('scanningOverlay').classList.add('hidden'), 1000);
         });
 
-        // Initialize state
+        // Initialize
         updateCalculations();
     </script>
 </body>
