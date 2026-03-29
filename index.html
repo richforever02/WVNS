@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>WVNS SUITE v2.9 | Tactical Geodetic Suite</title>
+    <title>WVNS SUITE v3.0 | Master Geodetic Suite</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -29,8 +29,6 @@
         .tactical-red .border-blue-500, .tactical-red .border-slate-800 { border-color: #7f1d1d; }
 
         .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.4); }
-        .glow-green { text-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
-        .glow-red { text-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
         .rim-alert { border-color: #ef4444 !important; box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.1); }
         
         input::-webkit-outer-spin-button,
@@ -79,13 +77,13 @@
     <!-- Header -->
     <header class="max-w-7xl mx-auto flex flex-row justify-between items-center mb-6 border-b border-slate-800 pb-4 gap-4 sticky top-0 bg-[#020617]/80 backdrop-blur-md z-50">
         <div class="flex items-center gap-3">
-            <div id="statusIcon" class="p-2 bg-blue-600 rounded-md shadow-lg shadow-blue-500/20 text-white transition-colors duration-500">
+            <div id="statusIcon" class="p-2 bg-blue-600 rounded-md shadow-lg shadow-blue-500/20 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             </div>
             <div>
-                <h1 class="text-sm font-black tracking-tighter text-white uppercase leading-none">WVNS_TACTICAL_v2.9</h1>
+                <h1 class="text-sm font-black tracking-tighter text-white uppercase leading-none">WVNS_MASTER_v3.0</h1>
                 <div class="flex items-center gap-2 mt-1">
-                    <p id="systemMode" class="text-[8px] text-blue-400 font-bold uppercase tracking-widest">Independent_Grid</p>
+                    <p class="text-[8px] text-blue-400 font-bold uppercase tracking-widest">Structural_Sync_Active</p>
                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
                 </div>
             </div>
@@ -104,14 +102,14 @@
     <!-- NAVIGATION PAGE -->
     <main id="calcPage" class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
         
-        <!-- Left Column: Inputs & Visualization -->
+        <!-- Input & Constant Column -->
         <div class="lg:col-span-4 space-y-4 md:space-y-6">
             <section id="inputCard" class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-2xl relative overflow-hidden transition-all duration-300">
                 <div id="scanningOverlay" class="absolute inset-0 bg-blue-500/5 hidden pointer-events-none">
                     <div class="scanner-line"></div>
                 </div>
                 
-                <h2 class="text-[10px] font-black mb-4 flex items-center gap-2 text-slate-500 uppercase tracking-widest">Acoustic Fix Entry</h2>
+                <h2 class="text-[10px] font-black mb-4 flex items-center gap-2 text-slate-500 uppercase tracking-widest">Fix Entry (Z/X)</h2>
 
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-3">
@@ -135,24 +133,21 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-2">
-                        <button id="auditBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-lg text-[9px] uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-blue-900/20">Manual Sync</button>
+                        <button id="auditBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-lg text-[9px] uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-blue-900/20">Acoustic Sync</button>
                         <button id="logSyncBtn" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-3 rounded-lg text-[9px] uppercase tracking-widest active:scale-95 transition-all">Log Fix</button>
                     </div>
                 </div>
             </section>
 
-            <!-- Radial Tolerance Protocol Status -->
+            <!-- Geodetic Constants Dashboard -->
             <section class="bg-slate-900 border border-slate-800 rounded-xl p-5">
-                <h3 class="text-[10px] font-black text-slate-500 mb-4 uppercase tracking-widest flex justify-between">
-                    <span>Radial Tolerance (RTP)</span>
-                    <span id="rtpStatus" class="text-green-500 font-black">INERTIAL SAFE</span>
-                </h3>
-                <div class="grid grid-cols-3 gap-2 h-1.5 mb-4">
-                    <div id="rtpBar1" class="bg-slate-800 rounded-full transition-colors"></div>
-                    <div id="rtpBar2" class="bg-slate-800 rounded-full transition-colors"></div>
-                    <div id="rtpBar3" class="bg-slate-800 rounded-full transition-colors"></div>
+                <h3 class="text-[10px] font-black text-slate-500 mb-4 uppercase tracking-widest">System Constants</h3>
+                <div class="space-y-3 text-[10px] font-bold">
+                    <div class="flex justify-between text-slate-400"><span>Pivot Altitude:</span><span class="text-white">5,000 MI</span></div>
+                    <div class="flex justify-between text-slate-400"><span>Radial Limit:</span><span class="text-white">7,768 MI</span></div>
+                    <div class="flex justify-between text-slate-400"><span>Master Step:</span><span class="text-white">86.31 MI</span></div>
+                    <div class="flex justify-between text-slate-400"><span>Grid Cells:</span><span class="text-white">364</span></div>
                 </div>
-                <p id="rtpDesc" class="text-[8px] text-slate-500 uppercase font-bold leading-tight italic">Structural integrity verified. No transition hazard detected.</p>
             </section>
 
             <!-- North Pivot Anchor Map -->
@@ -174,34 +169,60 @@
             </section>
         </div>
 
-        <!-- Right Column: Results & Analysis -->
+        <!-- Metrics & Dashboard Column -->
         <div class="lg:col-span-8 space-y-4 md:space-y-6">
             
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-                <!-- Mobile Results -->
-                <div class="lg:hidden grid grid-cols-4 divide-x divide-slate-800 text-center py-4 bg-black/40">
-                    <div><p class="text-[7px] text-slate-500 uppercase font-black">Radius</p><p id="mobValR" class="text-xs font-black text-white">--</p></div>
-                    <div><p class="text-[7px] text-blue-400 uppercase font-black">Altitude</p><p id="mobValY" class="text-xs font-black text-blue-400">--</p></div>
-                    <div><p class="text-[7px] text-slate-500 uppercase font-black">Sector</p><p id="mobValSector" class="text-xs font-black text-white">--</p></div>
-                    <div><p class="text-[7px] text-blue-500 uppercase font-black">PIC</p><p id="mobValPIC" class="text-xs font-black text-blue-500">--</p></div>
+                <!-- Master Header String -->
+                <div class="bg-black/60 py-4 px-8 border-b border-slate-800">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-2">
+                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest shrink-0">Absolute Fix String (Z, X, S, P, Y, r)</span>
+                        <span id="absoluteString" class="text-lg md:text-2xl font-black text-blue-500 tracking-tighter glow-blue">(0, 0, 0, 0, 0, 0)</span>
+                    </div>
                 </div>
 
-                <!-- Desktop Metrics -->
-                <div class="hidden lg:grid grid-cols-4 gap-4 p-8 text-center border-b border-slate-800/50">
-                    <div><p class="text-[10px] text-slate-500 font-black uppercase mb-1">Radial Dist (r)</p><p id="valR" class="text-3xl font-black text-white">--</p></div>
-                    <div><p class="text-[10px] text-blue-400 font-black uppercase mb-1">Vault Depth (Y)</p><p id="valY" class="text-3xl font-black text-blue-400 glow-blue">--</p></div>
-                    <div><p class="text-[10px] text-slate-500 font-black uppercase mb-1">Grid Sector</p><p id="valSector" class="text-3xl font-black text-white">--</p></div>
-                    <div><p class="text-[10px] text-blue-500 font-black uppercase mb-1">PIC Vector</p><p id="valPIC" class="text-3xl font-black text-blue-500">--</p></div>
+                <!-- Geodetic Telemetry Block -->
+                <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-800 text-center bg-black/20 border-b border-slate-800">
+                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">Vault Depth (Y)</p><p id="valY" class="text-3xl font-black text-blue-500 glow-blue">--</p></div>
+                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">Radial Dist (r)</p><p id="valR" class="text-3xl font-black text-white">--</p></div>
+                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">Grid Sector</p><p id="valSector" class="text-3xl font-black text-white">--</p></div>
+                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">PIC Vector</p><p id="valPIC" class="text-3xl font-black text-blue-500">--</p></div>
                 </div>
 
-                <!-- PIC Audit & Disk Radar -->
+                <!-- Progress Bars -->
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-slate-800">
+                    <!-- RTP Gauge -->
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Radial Tolerance Protocol</span>
+                            <span id="rtpStatus" class="text-[8px] font-black uppercase text-green-500">NOMINAL</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 h-1.5">
+                            <div id="rtpBar1" class="bg-slate-800 rounded-full transition-colors"></div>
+                            <div id="rtpBar2" class="bg-slate-800 rounded-full transition-colors"></div>
+                            <div id="rtpBar3" class="bg-slate-800 rounded-full transition-colors"></div>
+                        </div>
+                    </div>
+                    <!-- Displacement Gauge -->
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Structural Displacement</span>
+                            <span id="dispVal" class="text-[8px] font-black uppercase text-blue-500">0%</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                            <div id="dispBar" class="h-full bg-blue-600 transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis & Radar Row -->
                 <div class="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-800">
-                    <div id="picSection" class="p-5 md:p-6 transition-colors">
+                    <div id="picSection" class="p-6">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Handoff Proximity Audit</span>
-                            <div id="picBadge" class="px-2 py-0.5 rounded text-[8px] font-black uppercase border">STATUS</div>
+                            <div id="picBadge" class="px-2 py-0.5 rounded text-[8px] font-black uppercase border border-slate-800 text-slate-500">STANDBY</div>
                         </div>
-                        <div class="relative h-2.5 w-full bg-slate-950 rounded-full overflow-hidden mb-3 border border-slate-800/50">
+                        <div class="relative h-3 w-full bg-slate-950 rounded-full overflow-hidden mb-4 border border-slate-800/50">
                             <div class="absolute inset-0 bg-gradient-to-r from-red-500/10 via-green-500/10 to-red-500/10"></div>
                             <div id="picMarker" class="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_12px_white] transition-all duration-300 rounded-full" style="left: 50%"></div>
                         </div>
@@ -211,10 +232,12 @@
                             <div class="text-right"><span class="text-slate-600 block text-[7px] uppercase tracking-tighter">Outer Seam</span><span id="valOuter" class="text-slate-300">--</span></div>
                         </div>
                     </div>
-                    <div class="p-5 flex flex-col items-center justify-center relative bg-black/10">
+                    <div class="p-6 flex flex-col items-center justify-center relative bg-black/10">
                          <div id="pingVisualLayer" class="absolute inset-0 pointer-events-none flex items-center justify-center"></div>
-                         <svg id="radarSVG" viewBox="0 0 200 200" class="w-40 h-40 transition-transform duration-500 ease-out">
-                            <g id="radarSectorGrid" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="1 3"></g>
+                         <svg id="radarSVG" viewBox="0 0 200 200" class="w-44 h-44 transition-transform duration-500 ease-out">
+                            <g stroke="#1e293b" stroke-width="0.5" stroke-dasharray="1 3">
+                                <line x1="100" y1="10" x2="100" y2="190" /><line x1="10" y1="100" x2="190" y2="100" />
+                            </g>
                             <circle cx="100" cy="100" r="90" stroke="#1e293b" stroke-width="1" fill="none" />
                             <circle cx="100" cy="100" r="60" stroke="#1e293b" stroke-width="1" fill="none" stroke-dasharray="2" />
                             <circle cx="100" cy="100" r="30" stroke="#1e293b" stroke-width="1" fill="none" stroke-dasharray="2" />
@@ -226,33 +249,32 @@
                     </div>
                 </div>
 
-                <!-- Strategic Tools -->
-                <div class="grid grid-cols-1 md:grid-cols-2 border-t border-slate-800">
-                    <div class="p-5 md:p-6 bg-slate-950/30 border-r border-slate-800/50">
-                        <h3 class="text-[9px] font-black text-slate-500 mb-4 uppercase tracking-widest">Strategic Route Analysis</h3>
+                <!-- Comparative Tools -->
+                <div class="grid grid-cols-1 md:grid-cols-2 border-t border-slate-800 bg-slate-950/20">
+                    <div class="p-6 border-r border-slate-800/50">
+                        <h3 class="text-[9px] font-black text-slate-500 mb-4 uppercase tracking-widest">Radial Route Audit</h3>
                         <div class="flex flex-col gap-3 mb-4">
                             <div class="grid grid-cols-2 gap-2">
-                                <input id="routeStart" type="number" placeholder="Start Z" class="bg-black border border-slate-800 rounded p-2 text-xs font-bold outline-none focus:border-blue-500" />
-                                <input id="routeEnd" type="number" placeholder="Dest Z" class="bg-black border border-slate-800 rounded p-2 text-xs font-bold outline-none focus:border-blue-500" />
+                                <input id="routeStart" type="number" placeholder="Start Z" class="bg-black border border-slate-800 rounded p-2 text-xs font-bold outline-none focus:border-blue-500 text-white" />
+                                <input id="routeEnd" type="number" placeholder="Dest Z" class="bg-black border border-slate-800 rounded p-2 text-xs font-bold outline-none focus:border-blue-500 text-white" />
                             </div>
                             <button id="planRouteBtn" class="bg-slate-800 hover:bg-blue-600 text-white font-black py-2 rounded text-[9px] uppercase transition-all">Audit Route</button>
                         </div>
                         <div id="routeResult" class="hidden bg-black/50 border border-blue-900/20 p-3 rounded-lg text-[9px] space-y-2">
-                            <div class="flex justify-between"><span>Structural Handoffs:</span><span id="resSeams" class="text-blue-400 font-black">--</span></div>
-                            <div class="flex justify-between"><span>Total Radial Span:</span><span id="resSpan" class="text-white font-black">-- MI</span></div>
+                            <div class="flex justify-between"><span>Structural Seams:</span><span id="resSeams" class="text-blue-400 font-black">--</span></div>
+                            <div class="flex justify-between"><span>Radial Span:</span><span id="resSpan" class="text-white font-black">-- MI</span></div>
                         </div>
                     </div>
-
-                    <div class="p-5 md:p-6 bg-slate-950/30">
-                        <h3 class="text-[9px] font-black text-slate-500 mb-4 uppercase tracking-widest">Geodetic Delta Comparison</h3>
+                    <div class="p-6">
+                        <h3 class="text-[9px] font-black text-slate-500 mb-4 uppercase tracking-widest">Field Delta Delta</h3>
                         <div id="deltaResult" class="bg-black/50 border border-slate-800 p-3 rounded-lg text-[9px] h-[84px] flex flex-col justify-center space-y-1">
-                            <p id="deltaMsg" class="text-slate-600 italic text-center">Select two field entries in the archive to calculate delta.</p>
+                            <p id="deltaMsg" class="text-slate-600 italic text-center leading-tight">Select two archive entries to calculate volumetric delta.</p>
                             <div id="deltaStats" class="hidden space-y-1">
                                 <div class="flex justify-between text-blue-400"><span>Δ RADIUS (r):</span><span id="deltaR">-- MI</span></div>
                                 <div class="flex justify-between text-green-400"><span>Δ DEPTH (Y):</span><span id="deltaY">-- MI</span></div>
                             </div>
                         </div>
-                        <button id="resetDeltaBtn" class="w-full mt-2 text-[8px] font-black text-slate-600 hover:text-white uppercase hidden">Reset Selection</button>
+                        <button id="resetDeltaBtn" class="w-full mt-2 text-[8px] font-black text-slate-600 hover:text-white uppercase hidden">Reset Comparisons</button>
                     </div>
                 </div>
             </div>
@@ -260,15 +282,13 @@
             <!-- Field Archive -->
             <section class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
                 <div class="p-4 border-b border-slate-800 bg-slate-800/20 flex justify-between items-center">
-                    <h3 class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Field Archive</h3>
-                    <div class="flex gap-4">
-                        <button id="blackoutBtn" class="text-[8px] text-red-400 hover:bg-red-500 hover:text-white px-2 py-0.5 rounded border border-red-500/30 uppercase font-black transition-all">Blackout</button>
-                    </div>
+                    <h3 class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Independent Field Archive</h3>
+                    <button id="blackoutBtn" class="text-[8px] text-red-400 hover:bg-red-500 hover:text-white px-3 py-1 rounded border border-red-500/30 uppercase font-black transition-all">Blackout</button>
                 </div>
                 <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
                     <table class="w-full text-[11px] text-left">
                         <thead class="bg-black/40 text-slate-500 sticky top-0 uppercase text-[7px] font-black tracking-tighter">
-                            <tr><th class="p-3">SEL</th><th class="p-3">Fix (Z/X)</th><th class="p-3">Rad (r)</th><th class="p-3">Depth (Y)</th><th class="p-3 text-right pr-4">PIC Fix</th></tr>
+                            <tr><th class="p-3">SEL</th><th class="p-3">Z/X Fix</th><th class="p-3">Absolute Geodetic String</th><th class="p-3 text-right pr-4">Metrics (r/Y)</th></tr>
                         </thead>
                         <tbody id="logTableBody" class="divide-y divide-slate-800/50"></tbody>
                     </table>
@@ -278,37 +298,21 @@
         </div>
     </main>
 
-    <!-- INFO PAGE -->
-    <main id="infoPage" class="max-w-4xl mx-auto hidden-page space-y-8 py-6 px-4 text-xs">
-        <section class="space-y-4">
-            <h2 class="text-2xl font-black text-white border-l-4 border-blue-600 pl-4 uppercase">Navigational Protocol</h2>
-            <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-4">
-                <div>
-                    <h4 class="text-blue-500 font-black mb-1 uppercase">Acoustic Triangulation</h4>
-                    <p class="text-slate-400 leading-relaxed">Manual Sync triggers a sonar-style frequency audit to simulate a volumetric depth check against the vault ceiling.</p>
-                </div>
-                <div>
-                    <h4 class="text-blue-500 font-black mb-1 uppercase">The 4-Point Fix (PIC)</h4>
-                    <p class="text-slate-400 leading-relaxed">Sub-mile precision is achieved by combining the Grid Sector with the Position-In-Cell (PIC) Vector offset.</p>
-                </div>
-            </div>
-        </section>
-        <div class="text-center pb-20"><button id="backToCalc" class="px-8 py-3 bg-blue-600 text-white font-black rounded text-[9px] uppercase hover:bg-blue-500 transition-all">Return</button></div>
-    </main>
-
-    <footer class="max-w-7xl mx-auto mt-8 opacity-20 text-[8px] font-bold uppercase tracking-[0.2em] pb-10 flex justify-between">
-        <span>WVNS Framework // v2.9</span>
+    <footer class="max-w-7xl mx-auto mt-8 opacity-20 text-[8px] font-bold uppercase tracking-[0.2em] pb-10 flex justify-between px-4">
+        <span>WVNS Framework // v3.0</span>
         <span>Independent Tactical Suite</span>
     </footer>
 
     <script>
-        const R_MAX = 7768;
-        const Y_PEAK = 5000;
-        const MASTER_STEP = 86.31;
+        // System Constants from Geodetic Analysis
+        const R_MAX = 7768;      // Max Radial Distance
+        const Y_PEAK = 5000;     // Fixed Vault Peak Altitude
+        const MASTER_STEP = 86.31; // Grid Cell Constant
         const systemSlope = Y_PEAK / R_MAX;
 
+        // State Management
         let fieldLog = [];
-        let currentFix = { lat: 32, azi: 0, r: 0, y: 0, sector: 0, offset: 0 };
+        let currentFix = { lat: 32, azi: 0, r: 0, y: 0, sector: 0, offset: 0, absoluteString: "" };
         let prevSector = -1;
         let selectedDeltas = [];
         let audioCtx = null;
@@ -316,14 +320,6 @@
         const latInput = document.getElementById('latInput');
         const aziInput = document.getElementById('aziInput');
         const logTableBody = document.getElementById('logTableBody');
-
-        function showPage(pageId) {
-            document.getElementById('calcPage').classList.toggle('hidden-page', pageId !== 'calc');
-            document.getElementById('infoPage').classList.toggle('hidden-page', pageId !== 'info');
-            document.getElementById('navCalc').classList.toggle('active-nav', pageId === 'calc');
-            document.getElementById('navInfo').classList.toggle('active-nav', pageId === 'info');
-            window.scrollTo(0,0);
-        }
 
         function playPing() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -336,29 +332,20 @@
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.0);
             osc.connect(gain); gain.connect(audioCtx.destination);
             osc.start(); osc.stop(audioCtx.currentTime + 1.0);
+            
             const layer = document.getElementById('pingVisualLayer');
             const ripple = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            ripple.setAttribute("viewBox", "0 0 100 100");
-            ripple.classList.add("absolute", "w-48", "h-48");
+            ripple.setAttribute("viewBox", "0 0 100 100"); ripple.classList.add("absolute", "w-48", "h-48");
             ripple.innerHTML = `<circle class="ping-circle" cx="50" cy="50" r="20" />`;
             layer.appendChild(ripple);
             setTimeout(() => ripple.remove(), 1000);
-        }
-
-        const radarGrid = document.getElementById('radarSectorGrid');
-        for(let i=0; i<360; i+=10) {
-            const rad = (i-90) * Math.PI / 180;
-            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-            line.setAttribute("x1", "100"); line.setAttribute("y1", "100");
-            line.setAttribute("x2", 100 + 90 * Math.cos(rad));
-            line.setAttribute("y2", 100 + 90 * Math.sin(rad));
-            radarGrid.appendChild(line);
         }
 
         function updateCalculations() {
             let lat = parseFloat(latInput.value) || 0;
             let azi = parseFloat(aziInput.value) || 0;
             const clampedLat = Math.max(0, Math.min(90, Math.abs(lat)));
+            
             const r = ((90 - clampedLat) / 90) * R_MAX;
             const y = Y_PEAK - (r * systemSlope);
             const sector = Math.floor(r / MASTER_STEP) + 1;
@@ -371,43 +358,47 @@
             }
             prevSector = sector;
 
-            currentFix = { lat: clampedLat, azi, r, y, sector, offset };
+            // Updated Absolute Fix String (Z, X, S, P, Y, r)
+            const absoluteString = `(${clampedLat.toFixed(1)}, ${azi.toFixed(0)}, ${sector.toString().padStart(3, '0')}, ${offset.toFixed(1)}, ${y.toFixed(0)}, ${r.toFixed(0)})`;
+            
+            currentFix = { lat: clampedLat, azi, r, y, sector, offset, absoluteString };
 
             const setUI = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
             setUI('valR', r.toFixed(2));
             setUI('valY', y.toLocaleString(undefined, { maximumFractionDigits: 1 }));
-            setUI('valSector', `#${sector}`);
+            setUI('valSector', sector);
             setUI('valPIC', offset.toFixed(2));
-            setUI('mobValR', r.toFixed(1));
-            setUI('mobValY', y.toLocaleString(undefined, { maximumFractionDigits: 0 }));
-            setUI('mobValSector', `#${sector}`);
-            setUI('mobValPIC', offset.toFixed(1));
-            
+            setUI('absoluteString', absoluteString);
+
+            // RTP Status Logic
             const rtpStatus = document.getElementById('rtpStatus');
-            const rtpDesc = document.getElementById('rtpDesc');
             const bars = [document.getElementById('rtpBar1'), document.getElementById('rtpBar2'), document.getElementById('rtpBar3')];
             bars.forEach(b => b.className = 'bg-slate-800 rounded-full transition-colors');
             
             if (offset > 25 && offset < 61) {
-                rtpStatus.innerText = "INERTIAL SAFE"; rtpStatus.className = "text-green-500 font-black";
-                rtpDesc.innerText = "Optimal grid stability. No transition hazard detected.";
-                bars[0].classList.add('bg-green-500'); bars[1].classList.add('bg-green-500'); bars[2].classList.add('bg-green-500');
+                rtpStatus.innerText = "NOMINAL"; rtpStatus.className = "text-[8px] font-black uppercase text-green-500";
+                bars[0].className = 'bg-green-500 rounded-full'; bars[1].className = 'bg-green-500 rounded-full'; bars[2].className = 'bg-green-500 rounded-full';
             } else if ((offset >= 10 && offset <= 25) || (offset >= 61 && offset <= 76)) {
-                rtpStatus.innerText = "TRANSITION CAUTION"; rtpStatus.className = "text-yellow-500 font-black";
-                rtpDesc.innerText = "Approaching structural seam. Volumetric bias increasing.";
-                bars[0].classList.add('bg-yellow-500'); bars[1].classList.add('bg-yellow-500');
+                rtpStatus.innerText = "TRANSITION"; rtpStatus.className = "text-[8px] font-black uppercase text-yellow-500";
+                bars[0].className = 'bg-yellow-500 rounded-full'; bars[1].className = 'bg-yellow-500 rounded-full';
             } else {
-                rtpStatus.innerText = "SEAM HAZARD"; rtpStatus.className = "text-red-500 font-black";
-                rtpDesc.innerText = "CRITICAL PROXIMITY. Immediate hardware handoff required.";
-                bars[0].classList.add('bg-red-500');
+                rtpStatus.innerText = "SEAM HAZARD"; rtpStatus.className = "text-[8px] font-black uppercase text-red-500";
+                bars[0].className = 'bg-red-500 rounded-full';
             }
 
+            // Displacement Progress
+            const dispPercent = (r / R_MAX) * 100;
+            setUI('dispVal', `${dispPercent.toFixed(1)}%`);
+            document.getElementById('dispBar').style.width = `${dispPercent}%`;
+
+            // PIC Audit Bar
             const picMarker = document.getElementById('picMarker');
             if (picMarker) picMarker.style.left = `${(offset / MASTER_STEP) * 100}%`;
             setUI('valInner', offset.toFixed(1));
             setUI('valOffset', offset.toFixed(2));
             setUI('valOuter', (MASTER_STEP - offset).toFixed(1));
 
+            // Radar Visuals
             const radarRadius = (r / R_MAX) * 90;
             const aziRad = (azi - 90) * (Math.PI / 180);
             const rX = 100 + radarRadius * Math.cos(aziRad);
@@ -417,6 +408,7 @@
             document.getElementById('radarVector').setAttribute('x2', rX);
             document.getElementById('radarVector').setAttribute('y2', rY);
 
+            // Anchor Map Update
             const prox = ((R_MAX - r) / R_MAX) * 100;
             setUI('pivotProximity', `PROXIMITY: ${prox.toFixed(0)}%`);
             document.getElementById('anchorUserRing').setAttribute('r', (r / R_MAX) * 90);
@@ -425,23 +417,18 @@
             else document.getElementById('inputCard').classList.remove('rim-alert');
         }
 
-        // Settling Logic to prevent "jumpy" results during Manual Sync
         async function readOrientationOnce() {
             return new Promise((resolve) => {
                 let samples = [];
-                const settleTime = 400; // 400ms settling window
-                
+                const settleTime = 450;
                 const getHeading = (e) => {
                     let h = e.webkitCompassHeading || (360 - e.alpha);
                     if (h !== undefined) samples.push(h);
                 };
-
                 const eventName = window.DeviceOrientationEvent && 'ontouchstart' in window ? 'deviceorientation' : 'deviceorientationabsolute';
-                
                 const finalize = () => {
                     window.removeEventListener(eventName, getHeading, true);
                     if (samples.length > 0) {
-                        // Use the average of the last few samples for stability
                         const lastSamples = samples.slice(-5);
                         const avg = lastSamples.reduce((a, b) => a + b, 0) / lastSamples.length;
                         aziInput.value = avg.toFixed(1);
@@ -449,7 +436,6 @@
                     }
                     resolve();
                 };
-
                 if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
                     DeviceOrientationEvent.requestPermission().then(res => {
                         if (res === 'granted') {
@@ -465,13 +451,9 @@
         }
 
         document.getElementById('auditBtn').addEventListener('click', async () => {
-            // Trigger scan and ping first
             playPing();
             document.getElementById('scanningOverlay').classList.remove('hidden');
-            
-            // Read hardware orientation while the scan is running
             await readOrientationOnce();
-            
             setTimeout(() => document.getElementById('scanningOverlay').classList.add('hidden'), 800);
         });
 
@@ -488,12 +470,8 @@
             const btn = document.getElementById('syncCompassBtn');
             btn.innerText = compassActive ? "STOP" : "COMPASS";
             const eventName = window.DeviceOrientationEvent && 'ontouchstart' in window ? 'deviceorientation' : 'deviceorientationabsolute';
-            
-            if (compassActive) {
-                window.addEventListener(eventName, handleContinuousCompass, true);
-            } else {
-                window.removeEventListener(eventName, handleContinuousCompass, true);
-            }
+            if (compassActive) window.addEventListener(eventName, handleContinuousCompass, true);
+            else window.removeEventListener(eventName, handleContinuousCompass, true);
         }
 
         function handleContinuousCompass(e) {
@@ -505,18 +483,21 @@
         }
 
         document.getElementById('toggleLume').addEventListener('click', () => document.body.classList.toggle('tactical-red'));
+        
         document.getElementById('planRouteBtn').addEventListener('click', () => {
             const r1 = ((90 - Math.abs(parseFloat(document.getElementById('routeStart').value) || 0)) / 90) * R_MAX;
             const r2 = ((90 - Math.abs(parseFloat(document.getElementById('routeEnd').value) || 0)) / 90) * R_MAX;
             document.getElementById('resSeams').innerText = Math.abs(Math.floor(r1 / MASTER_STEP) - Math.floor(r2 / MASTER_STEP));
-            document.getElementById('resSpan').innerText = Math.abs(r1 - r2).toFixed(0);
+            document.getElementById('resSpan').innerText = Math.abs(r1 - r2).toFixed(0) + " MI";
             document.getElementById('routeResult').classList.remove('hidden');
         });
+
         document.getElementById('logSyncBtn').addEventListener('click', () => {
             fieldLog.unshift({...currentFix, id: Date.now()});
             if (fieldLog.length > 50) fieldLog.pop();
             renderLog();
         });
+
         function renderLog() {
             document.getElementById('emptyLogMsg').style.display = fieldLog.length ? 'none' : 'block';
             logTableBody.innerHTML = fieldLog.map(item => {
@@ -524,13 +505,13 @@
                 return `<tr class="hover:bg-blue-500/5 cursor-pointer ${sel ? 'bg-blue-500/20' : ''}" onclick="selRow(${item.id})">
                     <td class="p-3"><div class="w-2 h-2 rounded-full border border-slate-700 ${sel ? 'bg-blue-400' : ''}"></div></td>
                     <td class="p-3 font-black text-white">${item.lat.toFixed(1)}°/${item.azi.toFixed(0)}°</td>
-                    <td class="p-3 text-slate-500">${item.r.toFixed(0)}</td>
-                    <td class="p-3 text-blue-400 font-bold">${item.y.toFixed(0)}</td>
-                    <td class="p-3 text-right pr-4 text-slate-500">S${item.sector}:P${item.offset.toFixed(1)}</td>
+                    <td class="p-3 text-blue-400 font-bold tracking-tighter text-[9px]">${item.absoluteString}</td>
+                    <td class="p-3 text-right pr-4 text-slate-500 font-black">${item.r.toFixed(0)}/${item.y.toFixed(0)}</td>
                 </tr>`;
             }).join('');
             calcDelta();
         }
+
         window.selRow = (id) => {
             const entry = fieldLog.find(l => l.id === id);
             const idx = selectedDeltas.findIndex(d => d.id === id);
@@ -538,6 +519,7 @@
             else { if (selectedDeltas.length >= 2) selectedDeltas.shift(); selectedDeltas.push(entry); }
             renderLog();
         };
+
         function calcDelta() {
             if (selectedDeltas.length === 2) {
                 const rD = Math.abs(selectedDeltas[0].r - selectedDeltas[1].r);
@@ -553,6 +535,7 @@
                 document.getElementById('resetDeltaBtn').classList.add('hidden');
             }
         }
+
         document.getElementById('resetDeltaBtn').addEventListener('click', () => { selectedDeltas = []; renderLog(); });
         document.getElementById('blackoutBtn').addEventListener('click', () => { if (confirm("INITIATE BLACKOUT?")) { fieldLog = []; renderLog(); } });
 
@@ -560,7 +543,6 @@
         aziInput.addEventListener('input', updateCalculations);
         document.getElementById('navCalc').addEventListener('click', () => showPage('calc'));
         document.getElementById('navInfo').addEventListener('click', () => showPage('info'));
-        document.getElementById('backToCalc').addEventListener('click', () => showPage('calc'));
         updateCalculations();
     </script>
 </body>
