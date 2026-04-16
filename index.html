@@ -14,27 +14,29 @@
     <style>
         body {
             font-family: 'JetBrains Mono', monospace;
-            background-color: #020617;
-            color: #e2e8f0;
+            background-color: #f8fafc; /* Pure White/Slate-50 glossy backdrop */
+            color: #0f172a;
             -webkit-overflow-scrolling: touch;
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        body.tactical-red { background-color: #1a0505; color: #ef4444; }
-        .tactical-red .bg-slate-900 { background-color: #2d0a0a; border-color: #7f1d1d; }
-        .tactical-red .bg-black { background-color: #000; border-color: #7f1d1d; }
-        .tactical-red .text-blue-400, .tactical-red .text-blue-500 { color: #ef4444; }
-        .tactical-red .bg-blue-600 { background-color: #b91c1c; }
-        .tactical-red .border-blue-500, .tactical-red .border-slate-800 { border-color: #7f1d1d; }
+        
+        /* Tactical Red adjusted for light mode */
+        body.tactical-red { background-color: #fff1f2; color: #be123c; }
+        .tactical-red .bg-white { background-color: #ffe4e6; border-color: #fda4af; }
+        .tactical-red .bg-slate-50 { background-color: #fff1f2; border-color: #fda4af; }
+        .tactical-red .text-blue-400, .tactical-red .text-blue-500, .tactical-red .text-blue-600 { color: #be123c; }
+        .tactical-red .bg-blue-600 { background-color: #e11d48; }
+        .tactical-red .border-blue-500, .tactical-red .border-slate-200 { border-color: #fda4af; }
 
-        .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.4); }
-        .rim-alert { border-color: #ef4444 !important; box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.1); }
+        .glow-blue { text-shadow: 0 0 10px rgba(37, 99, 235, 0.2); }
+        .rim-alert { border-color: #ef4444 !important; box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.05); }
         
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .hidden-page { display: none !important; }
-        .active-nav { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
+        .active-nav { color: #2563eb; border-bottom: 2px solid #2563eb; }
         
         @keyframes scan {
             0% { transform: translateY(-100%); opacity: 0; }
@@ -59,39 +61,39 @@
 
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         
         .live-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
 
         @keyframes seam-flash {
             0% { background-color: rgba(239, 68, 68, 0); }
-            50% { background-color: rgba(239, 68, 68, 0.3); }
+            50% { background-color: rgba(239, 68, 68, 0.1); }
             100% { background-color: rgba(239, 68, 68, 0); }
         }
         .seam-flash-active { animation: seam-flash 0.5s ease-out 2; }
     </style>
 </head>
-<body id="mainBody" class="min-h-screen p-4 md:p-8 selection:bg-blue-500/30">
+<body id="mainBody" class="min-h-screen p-4 md:p-8 selection:bg-blue-500/20">
 
     <!-- Header -->
-    <header class="max-w-7xl mx-auto flex flex-row justify-between items-center mb-6 border-b border-slate-800 pb-4 gap-4 sticky top-0 bg-[#020617]/80 backdrop-blur-md z-50">
+    <header class="max-w-7xl mx-auto flex flex-row justify-between items-center mb-6 border-b border-slate-200 pb-4 gap-4 sticky top-0 bg-white/80 backdrop-blur-xl z-50 rounded-b-xl px-4 shadow-sm">
         <div class="flex items-center gap-3">
-            <div id="statusIcon" class="p-2 bg-blue-600 rounded-md shadow-lg shadow-blue-500/20 text-white">
+            <div id="statusIcon" class="p-2 bg-blue-600 rounded-md shadow-lg shadow-blue-500/30 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             </div>
             <div>
-                <h1 class="text-sm font-black tracking-tighter text-white uppercase leading-none">WVNS_MASTER_v3.0</h1>
+                <h1 class="text-sm font-black tracking-tighter text-slate-900 uppercase leading-none">WVNS_MASTER_v3.0</h1>
                 <div class="flex items-center gap-2 mt-1">
-                    <p class="text-[8px] text-blue-400 font-bold uppercase tracking-widest">Structural_Sync_Active</p>
+                    <p class="text-[8px] text-blue-600 font-bold uppercase tracking-widest">Structural_Sync_Active</p>
                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
                 </div>
             </div>
         </div>
         
         <nav class="flex gap-4 text-[9px] font-black uppercase tracking-widest">
-            <button id="navCalc" class="pb-1 transition-all active-nav">Navigator</button>
-            <button id="navInfo" class="pb-1 text-slate-500 hover:text-slate-300 transition-all">Doc</button>
+            <button id="navCalc" class="pb-1 transition-all active-nav text-blue-600">Navigator</button>
+            <button id="navInfo" class="pb-1 text-slate-500 hover:text-blue-500 transition-all">Info</button>
             <button id="toggleLume" class="pb-1 text-slate-500 hover:text-red-500 transition-all flex items-center gap-1">
                 <div class="w-2 h-2 rounded-full bg-red-600"></div>
                 Lume
@@ -104,63 +106,63 @@
         
         <!-- Input & Constant Column -->
         <div class="lg:col-span-4 space-y-4 md:space-y-6">
-            <section id="inputCard" class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-2xl relative overflow-hidden transition-all duration-300">
+            <section id="inputCard" class="bg-white border border-slate-200 rounded-xl p-5 shadow-xl shadow-slate-200/50 relative overflow-hidden transition-all duration-300">
                 <div id="scanningOverlay" class="absolute inset-0 bg-blue-500/5 hidden pointer-events-none">
                     <div class="scanner-line"></div>
                 </div>
                 
-                <h2 class="text-[10px] font-black mb-4 flex items-center gap-2 text-slate-500 uppercase tracking-widest">Fix Entry (Z/X)</h2>
+                <h2 class="text-[10px] font-black mb-4 flex items-center gap-2 text-slate-500 uppercase tracking-widest">Fix Entry (X/Z)</h2>
 
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-[8px] text-slate-500 mb-1 uppercase font-bold">Latitude (Z)</label>
+                            <label class="block text-[8px] text-slate-500 mb-1 uppercase font-bold">Latitude (X)</label>
                             <div class="relative">
-                                <input id="latInput" type="number" inputmode="decimal" value="32.0" class="w-full bg-black border border-slate-700 rounded p-2 text-2xl text-white outline-none focus:border-blue-500 font-black transition-all" />
-                                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-700 font-bold">°</span>
+                                <input id="latInput" type="number" inputmode="decimal" value="32.0" class="w-full bg-slate-50 border border-slate-300 rounded p-2 text-2xl text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 font-black transition-all" />
+                                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 font-bold">°</span>
                             </div>
                         </div>
                         <div>
                             <label class="block text-[8px] text-slate-500 mb-1 uppercase font-bold flex justify-between">
-                                <span>Azimuth (X)</span>
-                                <button id="syncCompassBtn" class="text-[7px] text-blue-500 font-black hover:text-white transition-colors">COMPASS</button>
+                                <span>Azimuth (Z)</span>
+                                <button id="syncCompassBtn" class="text-[7px] text-blue-600 font-black hover:text-blue-800 transition-colors">COMPASS</button>
                             </label>
                             <div class="relative">
-                                <input id="aziInput" type="number" inputmode="decimal" value="0.0" class="w-full bg-black border border-slate-700 rounded p-2 text-2xl text-white outline-none focus:border-blue-500 font-black transition-all" />
-                                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-700 font-bold">°</span>
+                                <input id="aziInput" type="number" inputmode="decimal" value="0.0" class="w-full bg-slate-50 border border-slate-300 rounded p-2 text-2xl text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 font-black transition-all" />
+                                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 font-bold">°</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-2">
-                        <button id="auditBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-lg text-[9px] uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-blue-900/20">Acoustic Sync</button>
-                        <button id="logSyncBtn" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-3 rounded-lg text-[9px] uppercase tracking-widest active:scale-95 transition-all">Log Fix</button>
+                        <button id="auditBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-lg text-[9px] uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-blue-500/30">Acoustic Sync</button>
+                        <button id="logSyncBtn" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-black py-3 rounded-lg text-[9px] uppercase tracking-widest active:scale-95 transition-all">Log Fix</button>
                     </div>
                 </div>
             </section>
 
             <!-- Geodetic Constants Dashboard -->
-            <section class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <section class="bg-white border border-slate-200 rounded-xl p-5 shadow-xl shadow-slate-200/50">
                 <h3 class="text-[10px] font-black text-slate-500 mb-4 uppercase tracking-widest">System Constants</h3>
                 <div class="space-y-3 text-[10px] font-bold">
-                    <div class="flex justify-between text-slate-400"><span>Pivot Altitude:</span><span class="text-white">5,000 MI</span></div>
-                    <div class="flex justify-between text-slate-400"><span>Radial Limit:</span><span class="text-white">7,768 MI</span></div>
-                    <div class="flex justify-between text-slate-400"><span>Master Step:</span><span class="text-white">86.31 MI</span></div>
-                    <div class="flex justify-between text-slate-400"><span>Grid Cells:</span><span class="text-white">364</span></div>
+                    <div class="flex justify-between text-slate-500"><span>Pivot Altitude:</span><span class="text-slate-900">5,000 MI</span></div>
+                    <div class="flex justify-between text-slate-500"><span>Radial Limit:</span><span class="text-slate-900">7,768 MI</span></div>
+                    <div class="flex justify-between text-slate-500"><span>Master Step:</span><span class="text-slate-900">86.31 MI</span></div>
+                    <div class="flex justify-between text-slate-500"><span>Grid Cells:</span><span class="text-slate-900">364</span></div>
                 </div>
             </section>
 
             <!-- North Pivot Anchor Map -->
-            <section class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <section class="bg-white border border-slate-200 rounded-xl p-5 shadow-xl shadow-slate-200/50">
                 <h3 class="text-[10px] font-black text-slate-500 mb-4 uppercase tracking-widest flex justify-between">
                     <span>Pivot Anchor Map</span>
-                    <span id="pivotProximity" class="text-blue-500">PROXIMITY: 0%</span>
+                    <span id="pivotProximity" class="text-blue-600">PROXIMITY: 0%</span>
                 </h3>
-                <div class="bg-black/40 rounded-lg p-4 relative overflow-hidden flex flex-col items-center">
+                <div class="bg-slate-50 rounded-lg p-4 relative overflow-hidden flex flex-col items-center border border-slate-200">
                     <svg id="anchorSVG" viewBox="0 0 200 100" class="w-full h-auto">
-                        <circle cx="100" cy="100" r="90" stroke="#1e293b" stroke-width="1" fill="none" stroke-dasharray="2" />
-                        <circle cx="100" cy="100" r="60" stroke="#1e293b" stroke-width="1" fill="none" stroke-dasharray="2" />
-                        <circle cx="100" cy="100" r="30" stroke="#1e293b" stroke-width="1" fill="none" stroke-dasharray="2" />
+                        <circle cx="100" cy="100" r="90" stroke="#cbd5e1" stroke-width="1" fill="none" stroke-dasharray="2" />
+                        <circle cx="100" cy="100" r="60" stroke="#cbd5e1" stroke-width="1" fill="none" stroke-dasharray="2" />
+                        <circle cx="100" cy="100" r="30" stroke="#cbd5e1" stroke-width="1" fill="none" stroke-dasharray="2" />
                         <circle cx="100" cy="100" r="5" fill="#3b82f6" class="animate-pulse" />
                         <text x="100" y="90" text-anchor="middle" fill="#3b82f6" font-size="6" font-weight="bold">NORTH PIVOT</text>
                         <circle id="anchorUserRing" cx="100" cy="100" r="50" stroke="#3b82f6" stroke-width="2" fill="none" stroke-opacity="0.3" />
@@ -172,75 +174,75 @@
         <!-- Metrics & Dashboard Column -->
         <div class="lg:col-span-8 space-y-4 md:space-y-6">
             
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xl shadow-slate-200/50">
                 <!-- Master Header String -->
-                <div class="bg-black/60 py-4 px-8 border-b border-slate-800">
+                <div class="bg-slate-50 py-4 px-8 border-b border-slate-200">
                     <div class="flex flex-col md:flex-row justify-between items-center gap-2">
-                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest shrink-0">Absolute Fix String (Z, X, S, P, Y, r)</span>
-                        <span id="absoluteString" class="text-lg md:text-2xl font-black text-blue-500 tracking-tighter glow-blue">(0, 0, 0, 0, 0, 0)</span>
+                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest shrink-0">Absolute Fix String (X, Z, S, P, Y, r)</span>
+                        <span id="absoluteString" class="text-lg md:text-2xl font-black text-blue-600 tracking-tighter glow-blue">(0, 0, 0, 0, 0, 0)</span>
                     </div>
                 </div>
 
                 <!-- Geodetic Telemetry Block -->
-                <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-800 text-center bg-black/20 border-b border-slate-800">
-                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">Vault Depth (Y)</p><p id="valY" class="text-3xl font-black text-blue-500 glow-blue">--</p></div>
-                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">Radial Dist (r)</p><p id="valR" class="text-3xl font-black text-white">--</p></div>
-                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">Grid Sector</p><p id="valSector" class="text-3xl font-black text-white">--</p></div>
-                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">PIC Vector</p><p id="valPIC" class="text-3xl font-black text-blue-500">--</p></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-200 text-center bg-white border-b border-slate-200">
+                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">Vault Depth (Y)</p><p id="valY" class="text-3xl font-black text-blue-600 glow-blue">--</p></div>
+                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">Radial Dist (r)</p><p id="valR" class="text-3xl font-black text-slate-900">--</p></div>
+                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">Grid Sector</p><p id="valSector" class="text-3xl font-black text-slate-900">--</p></div>
+                    <div class="py-6"><p class="text-[7px] text-slate-500 uppercase font-black mb-1">PIC Vector</p><p id="valPIC" class="text-3xl font-black text-blue-600">--</p></div>
                 </div>
 
                 <!-- Progress Bars -->
-                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-slate-800">
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-slate-200 bg-white">
                     <!-- RTP Gauge -->
                     <div class="space-y-3">
                         <div class="flex justify-between items-center">
-                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Radial Tolerance Protocol</span>
+                            <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Radial Tolerance Protocol</span>
                             <span id="rtpStatus" class="text-[8px] font-black uppercase text-green-500">NOMINAL</span>
                         </div>
                         <div class="grid grid-cols-3 gap-2 h-1.5">
-                            <div id="rtpBar1" class="bg-slate-800 rounded-full transition-colors"></div>
-                            <div id="rtpBar2" class="bg-slate-800 rounded-full transition-colors"></div>
-                            <div id="rtpBar3" class="bg-slate-800 rounded-full transition-colors"></div>
+                            <div id="rtpBar1" class="bg-slate-200 rounded-full transition-colors"></div>
+                            <div id="rtpBar2" class="bg-slate-200 rounded-full transition-colors"></div>
+                            <div id="rtpBar3" class="bg-slate-200 rounded-full transition-colors"></div>
                         </div>
                     </div>
                     <!-- Displacement Gauge -->
                     <div class="space-y-3">
                         <div class="flex justify-between items-center">
-                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Structural Displacement</span>
-                            <span id="dispVal" class="text-[8px] font-black uppercase text-blue-500">0%</span>
+                            <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Structural Displacement</span>
+                            <span id="dispVal" class="text-[8px] font-black uppercase text-blue-600">0%</span>
                         </div>
-                        <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
                             <div id="dispBar" class="h-full bg-blue-600 transition-all duration-500" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Analysis & Radar Row -->
-                <div class="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-800">
+                <div class="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-200 bg-white">
                     <div id="picSection" class="p-6">
                         <div class="flex justify-between items-center mb-4">
-                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Handoff Proximity Audit</span>
-                            <div id="picBadge" class="px-2 py-0.5 rounded text-[8px] font-black uppercase border border-slate-800 text-slate-500">STANDBY</div>
+                            <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Handoff Proximity Audit</span>
+                            <div id="picBadge" class="px-2 py-0.5 rounded text-[8px] font-black uppercase border border-slate-200 text-slate-500">STANDBY</div>
                         </div>
-                        <div class="relative h-3 w-full bg-slate-950 rounded-full overflow-hidden mb-4 border border-slate-800/50">
+                        <div class="relative h-3 w-full bg-slate-100 rounded-full overflow-hidden mb-4 border border-slate-200">
                             <div class="absolute inset-0 bg-gradient-to-r from-red-500/10 via-green-500/10 to-red-500/10"></div>
-                            <div id="picMarker" class="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_12px_white] transition-all duration-300 rounded-full" style="left: 50%"></div>
+                            <div id="picMarker" class="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_8px_rgba(0,0,0,0.5)] transition-all duration-300 rounded-full border border-slate-300" style="left: 50%"></div>
                         </div>
                         <div class="grid grid-cols-3 text-[10px] font-bold">
-                            <div class="text-left"><span class="text-slate-600 block text-[7px] uppercase tracking-tighter">Inner Seam</span><span id="valInner" class="text-slate-300">--</span></div>
-                            <div class="text-center"><span class="text-slate-600 block text-[7px] uppercase tracking-tighter">PIC Offset</span><span id="valOffset" class="text-blue-500">--</span></div>
-                            <div class="text-right"><span class="text-slate-600 block text-[7px] uppercase tracking-tighter">Outer Seam</span><span id="valOuter" class="text-slate-300">--</span></div>
+                            <div class="text-left"><span class="text-slate-500 block text-[7px] uppercase tracking-tighter">Inner Seam</span><span id="valInner" class="text-slate-800">--</span></div>
+                            <div class="text-center"><span class="text-slate-500 block text-[7px] uppercase tracking-tighter">PIC Offset</span><span id="valOffset" class="text-blue-600">--</span></div>
+                            <div class="text-right"><span class="text-slate-500 block text-[7px] uppercase tracking-tighter">Outer Seam</span><span id="valOuter" class="text-slate-800">--</span></div>
                         </div>
                     </div>
-                    <div class="p-6 flex flex-col items-center justify-center relative bg-black/10">
+                    <div class="p-6 flex flex-col items-center justify-center relative bg-slate-50">
                          <div id="pingVisualLayer" class="absolute inset-0 pointer-events-none flex items-center justify-center"></div>
                          <svg id="radarSVG" viewBox="0 0 200 200" class="w-44 h-44 transition-transform duration-500 ease-out">
-                            <g stroke="#1e293b" stroke-width="0.5" stroke-dasharray="1 3">
+                            <g stroke="#cbd5e1" stroke-width="0.5" stroke-dasharray="1 3">
                                 <line x1="100" y1="10" x2="100" y2="190" /><line x1="10" y1="100" x2="190" y2="100" />
                             </g>
-                            <circle cx="100" cy="100" r="90" stroke="#1e293b" stroke-width="1" fill="none" />
-                            <circle cx="100" cy="100" r="60" stroke="#1e293b" stroke-width="1" fill="none" stroke-dasharray="2" />
-                            <circle cx="100" cy="100" r="30" stroke="#1e293b" stroke-width="1" fill="none" stroke-dasharray="2" />
+                            <circle cx="100" cy="100" r="90" stroke="#cbd5e1" stroke-width="1" fill="none" />
+                            <circle cx="100" cy="100" r="60" stroke="#cbd5e1" stroke-width="1" fill="none" stroke-dasharray="2" />
+                            <circle cx="100" cy="100" r="30" stroke="#cbd5e1" stroke-width="1" fill="none" stroke-dasharray="2" />
                             <g id="radarPointer">
                                 <line id="radarVector" x1="100" y1="100" x2="100" y2="50" stroke="#3b82f6" stroke-width="1" stroke-dasharray="1" />
                                 <circle id="radarDot" cx="100" cy="50" r="4" fill="#3b82f6" class="live-pulse" />
@@ -250,55 +252,96 @@
                 </div>
 
                 <!-- Comparative Tools -->
-                <div class="grid grid-cols-1 md:grid-cols-2 border-t border-slate-800 bg-slate-950/20">
-                    <div class="p-6 border-r border-slate-800/50">
+                <div class="grid grid-cols-1 md:grid-cols-2 border-t border-slate-200 bg-slate-50">
+                    <div class="p-6 border-r border-slate-200">
                         <h3 class="text-[9px] font-black text-slate-500 mb-4 uppercase tracking-widest">Radial Route Audit</h3>
                         <div class="flex flex-col gap-3 mb-4">
                             <div class="grid grid-cols-2 gap-2">
-                                <input id="routeStart" type="number" placeholder="Start Z" class="bg-black border border-slate-800 rounded p-2 text-xs font-bold outline-none focus:border-blue-500 text-white" />
-                                <input id="routeEnd" type="number" placeholder="Dest Z" class="bg-black border border-slate-800 rounded p-2 text-xs font-bold outline-none focus:border-blue-500 text-white" />
+                                <input id="routeStart" type="number" placeholder="Start X" class="bg-white border border-slate-300 rounded p-2 text-xs font-bold outline-none focus:border-blue-500 text-slate-900" />
+                                <input id="routeEnd" type="number" placeholder="Dest X" class="bg-white border border-slate-300 rounded p-2 text-xs font-bold outline-none focus:border-blue-500 text-slate-900" />
                             </div>
-                            <button id="planRouteBtn" class="bg-slate-800 hover:bg-blue-600 text-white font-black py-2 rounded text-[9px] uppercase transition-all">Audit Route</button>
+                            <button id="planRouteBtn" class="bg-slate-200 hover:bg-blue-600 hover:text-white text-slate-800 font-black py-2 rounded text-[9px] uppercase transition-all">Audit Route</button>
                         </div>
-                        <div id="routeResult" class="hidden bg-black/50 border border-blue-900/20 p-3 rounded-lg text-[9px] space-y-2">
-                            <div class="flex justify-between"><span>Structural Seams:</span><span id="resSeams" class="text-blue-400 font-black">--</span></div>
-                            <div class="flex justify-between"><span>Radial Span:</span><span id="resSpan" class="text-white font-black">-- MI</span></div>
+                        <div id="routeResult" class="hidden bg-white border border-blue-200 p-3 rounded-lg text-[9px] space-y-2 shadow-sm">
+                            <div class="flex justify-between"><span class="text-slate-500">Structural Seams:</span><span id="resSeams" class="text-blue-600 font-black">--</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Radial Span:</span><span id="resSpan" class="text-slate-900 font-black">-- MI</span></div>
                         </div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-[9px] font-black text-slate-500 mb-4 uppercase tracking-widest">Field Delta Delta</h3>
-                        <div id="deltaResult" class="bg-black/50 border border-slate-800 p-3 rounded-lg text-[9px] h-[84px] flex flex-col justify-center space-y-1">
-                            <p id="deltaMsg" class="text-slate-600 italic text-center leading-tight">Select two archive entries to calculate volumetric delta.</p>
+                        <div id="deltaResult" class="bg-white border border-slate-300 p-3 rounded-lg text-[9px] h-[84px] flex flex-col justify-center space-y-1 shadow-sm">
+                            <p id="deltaMsg" class="text-slate-500 italic text-center leading-tight">Select two archive entries to calculate volumetric delta.</p>
                             <div id="deltaStats" class="hidden space-y-1">
-                                <div class="flex justify-between text-blue-400"><span>Δ RADIUS (r):</span><span id="deltaR">-- MI</span></div>
-                                <div class="flex justify-between text-green-400"><span>Δ DEPTH (Y):</span><span id="deltaY">-- MI</span></div>
+                                <div class="flex justify-between text-blue-600"><span>Δ RADIUS (r):</span><span id="deltaR">-- MI</span></div>
+                                <div class="flex justify-between text-green-600"><span>Δ DEPTH (Y):</span><span id="deltaY">-- MI</span></div>
                             </div>
                         </div>
-                        <button id="resetDeltaBtn" class="w-full mt-2 text-[8px] font-black text-slate-600 hover:text-white uppercase hidden">Reset Comparisons</button>
+                        <button id="resetDeltaBtn" class="w-full mt-2 text-[8px] font-black text-slate-400 hover:text-slate-800 uppercase hidden">Reset Comparisons</button>
                     </div>
                 </div>
             </div>
 
             <!-- Field Archive -->
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-                <div class="p-4 border-b border-slate-800 bg-slate-800/20 flex justify-between items-center">
+            <section class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xl shadow-slate-200/50">
+                <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
                     <h3 class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Independent Field Archive</h3>
-                    <button id="blackoutBtn" class="text-[8px] text-red-400 hover:bg-red-500 hover:text-white px-3 py-1 rounded border border-red-500/30 uppercase font-black transition-all">Blackout</button>
+                    <button id="blackoutBtn" class="text-[8px] text-red-500 hover:bg-red-50 hover:text-red-600 px-3 py-1 rounded border border-red-200 uppercase font-black transition-all bg-white shadow-sm">Blackout</button>
                 </div>
                 <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
                     <table class="w-full text-[11px] text-left">
-                        <thead class="bg-black/40 text-slate-500 sticky top-0 uppercase text-[7px] font-black tracking-tighter">
-                            <tr><th class="p-3">SEL</th><th class="p-3">Z/X Fix</th><th class="p-3">Absolute Geodetic String</th><th class="p-3 text-right pr-4">Metrics (r/Y)</th></tr>
+                        <thead class="bg-slate-100 text-slate-500 sticky top-0 uppercase text-[7px] font-black tracking-tighter border-b border-slate-200">
+                            <tr><th class="p-3">SEL</th><th class="p-3">X/Z Fix</th><th class="p-3">Absolute Geodetic String</th><th class="p-3 text-right pr-4">Metrics (r/Y)</th></tr>
                         </thead>
-                        <tbody id="logTableBody" class="divide-y divide-slate-800/50"></tbody>
+                        <tbody id="logTableBody" class="divide-y divide-slate-100"></tbody>
                     </table>
-                    <div id="emptyLogMsg" class="p-8 text-center text-slate-700 italic text-[10px]">No geodetic data logged.</div>
+                    <div id="emptyLogMsg" class="p-8 text-center text-slate-400 italic text-[10px]">No geodetic data logged.</div>
                 </div>
             </section>
         </div>
     </main>
 
-    <footer class="max-w-7xl mx-auto mt-8 opacity-20 text-[8px] font-bold uppercase tracking-[0.2em] pb-10 flex justify-between px-4">
+    <!-- INFORMATION PAGE -->
+    <main id="infoPage" class="max-w-7xl mx-auto hidden-page">
+        <section class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xl shadow-slate-200/50 p-6 md:p-10 space-y-8 text-slate-700 leading-relaxed max-w-4xl mx-auto">
+            
+            <div class="space-y-2 border-b border-slate-200 pb-6">
+                <h2 class="text-2xl md:text-3xl font-black tracking-tighter text-blue-600 uppercase">Technical Geodetic Assessment</h2>
+                <h3 class="text-sm md:text-base font-bold text-slate-400 uppercase tracking-widest">World Volumetric Navigation System (WVNS)</h3>
+            </div>
+
+            <div class="space-y-6 text-sm md:text-base">
+                <p>The evolution of navigational science has reached a critical juncture, necessitating a foundational pivot from traditional, open-loop architectures to a more robust, independent solution known as the <strong>World Volumetric Navigation System (WVNS)</strong>. For decades, the dominant paradigm relied on 2D surface grids (Longitude/Latitude) inherently vulnerable to signal drift and lacking an absolute vertical reference.</p>
+                
+                <p>WVNS represents a shift toward a closed-loop 3D grid derived from the containment geometry of the physical environment, treating altitude not as a variable determined by barometric pressure, but as a fixed physical constant synchronized with the structural dimensions of the world.</p>
+
+                <h4 class="text-lg font-black text-slate-900 uppercase tracking-tight mt-8">The Volumetric Paradigm & Geometry</h4>
+                <p>WVNS replaces the variable nature of altitude with <strong>Vault Depth (Y)</strong>, a dimension derived directly from the physical ceiling of the containment system (colloquially known as the Firmament or Vault). This mathematical baseline is established by an absolute Radius Constant of <strong>7,768 miles</strong> from the North Pole Pivot to the Antarctica Firewall.</p>
+                
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 font-mono text-xs">
+                    <p class="font-bold text-blue-600 mb-2">// 3D Volumetric Grid Comparison</p>
+                    <ul class="space-y-2 text-slate-600">
+                        <li><strong>Watcher UI:</strong> 2D Grid / Variable Relational Vertical / Open-Loop Satellite / Spheroid Sourced</li>
+                        <li><strong>WVNS:</strong> 3D Volumetric / Fixed Absolute Vertical Constant / Closed-Loop Geometric / North Pivot Sourced</li>
+                    </ul>
+                </div>
+
+                <h4 class="text-lg font-black text-slate-900 uppercase tracking-tight mt-8">The Structural Anatomy</h4>
+                <p>The Vault/Firmament is a solid physical constant providing an absolute Y-axis. Sourced from ancient cosmological models, the Firmament separates the habitable environment from the external matrix. The Earth's stability within this volumetric system is anchored by structural pillars and a fixed circular horizon, bounding the 7,768-mile cell.</p>
+                
+                <h4 class="text-lg font-black text-slate-900 uppercase tracking-tight mt-8">Navigational Protocols & Grid Seams</h4>
+                <p>The WVNS operational environment is divided into a <strong>364-cell grid</strong>, composed of fixed <strong>86.31-mile steps</strong>. A navigator's Position-In-Cell (PIC) calculates the exact proximity to a Structural Seam. When the PIC Offset reaches the boundaries (0.0 offset), the navigator transitions to a new inertial sector, requiring a new visual audit of the anchor star to lock the Y-constant for the next cell.</p>
+                
+                <ul class="list-disc list-inside space-y-1 text-slate-600 ml-2">
+                    <li><strong>0 to 7,768 Miles:</strong> The complete operational radius.</li>
+                    <li><strong>3,884 Miles:</strong> Symmetric Midpoint (perfect geometric square in the 3D grid).</li>
+                    <li><strong>6,215 Miles:</strong> The Refraction Limit (necessitating a handoff to a Southern Anchor star).</li>
+                    <li><strong>7,768 Miles:</strong> Phase Shift & Quarantine Limit (Total Pressure Seal / Firewall).</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="max-w-7xl mx-auto mt-8 text-slate-400 text-[8px] font-bold uppercase tracking-[0.2em] pb-10 flex justify-between px-4">
         <span>WVNS Framework // v3.0</span>
         <span>Independent Tactical Suite</span>
     </footer>
@@ -358,7 +401,7 @@
             }
             prevSector = sector;
 
-            // Updated Absolute Fix String (Z, X, S, P, Y, r)
+            // Updated Absolute Fix String (X, Z, S, P, Y, r)
             const absoluteString = `(${clampedLat.toFixed(1)}, ${azi.toFixed(0)}, ${sector.toString().padStart(3, '0')}, ${offset.toFixed(1)}, ${y.toFixed(0)}, ${r.toFixed(0)})`;
             
             currentFix = { lat: clampedLat, azi, r, y, sector, offset, absoluteString };
@@ -373,7 +416,7 @@
             // RTP Status Logic
             const rtpStatus = document.getElementById('rtpStatus');
             const bars = [document.getElementById('rtpBar1'), document.getElementById('rtpBar2'), document.getElementById('rtpBar3')];
-            bars.forEach(b => b.className = 'bg-slate-800 rounded-full transition-colors');
+            bars.forEach(b => b.className = 'bg-slate-200 rounded-full transition-colors');
             
             if (offset > 25 && offset < 61) {
                 rtpStatus.innerText = "NOMINAL"; rtpStatus.className = "text-[8px] font-black uppercase text-green-500";
@@ -502,10 +545,10 @@
             document.getElementById('emptyLogMsg').style.display = fieldLog.length ? 'none' : 'block';
             logTableBody.innerHTML = fieldLog.map(item => {
                 const sel = selectedDeltas.find(d => d.id === item.id);
-                return `<tr class="hover:bg-blue-500/5 cursor-pointer ${sel ? 'bg-blue-500/20' : ''}" onclick="selRow(${item.id})">
-                    <td class="p-3"><div class="w-2 h-2 rounded-full border border-slate-700 ${sel ? 'bg-blue-400' : ''}"></div></td>
-                    <td class="p-3 font-black text-white">${item.lat.toFixed(1)}°/${item.azi.toFixed(0)}°</td>
-                    <td class="p-3 text-blue-400 font-bold tracking-tighter text-[9px]">${item.absoluteString}</td>
+                return `<tr class="hover:bg-blue-500/10 cursor-pointer ${sel ? 'bg-blue-500/10' : ''}" onclick="selRow(${item.id})">
+                    <td class="p-3"><div class="w-2 h-2 rounded-full border border-slate-300 ${sel ? 'bg-blue-500 border-blue-500' : ''}"></div></td>
+                    <td class="p-3 font-black text-slate-800">${item.lat.toFixed(1)}°/${item.azi.toFixed(0)}°</td>
+                    <td class="p-3 text-blue-600 font-bold tracking-tighter text-[9px]">${item.absoluteString}</td>
                     <td class="p-3 text-right pr-4 text-slate-500 font-black">${item.r.toFixed(0)}/${item.y.toFixed(0)}</td>
                 </tr>`;
             }).join('');
@@ -536,6 +579,27 @@
             }
         }
 
+        // Navigation Controller Implementation
+        function showPage(pageId) {
+            document.getElementById('calcPage').classList.add('hidden-page');
+            document.getElementById('infoPage').classList.add('hidden-page');
+            
+            document.getElementById(pageId + 'Page').classList.remove('hidden-page');
+
+            document.getElementById('navCalc').classList.remove('active-nav', 'text-blue-600');
+            document.getElementById('navInfo').classList.remove('active-nav', 'text-blue-600');
+            document.getElementById('navCalc').classList.add('text-slate-500');
+            document.getElementById('navInfo').classList.add('text-slate-500');
+
+            if(pageId === 'calc') {
+                document.getElementById('navCalc').classList.add('active-nav', 'text-blue-600');
+                document.getElementById('navCalc').classList.remove('text-slate-500');
+            } else if (pageId === 'info') {
+                document.getElementById('navInfo').classList.add('active-nav', 'text-blue-600');
+                document.getElementById('navInfo').classList.remove('text-slate-500');
+            }
+        }
+
         document.getElementById('resetDeltaBtn').addEventListener('click', () => { selectedDeltas = []; renderLog(); });
         document.getElementById('blackoutBtn').addEventListener('click', () => { if (confirm("INITIATE BLACKOUT?")) { fieldLog = []; renderLog(); } });
 
@@ -543,7 +607,9 @@
         aziInput.addEventListener('input', updateCalculations);
         document.getElementById('navCalc').addEventListener('click', () => showPage('calc'));
         document.getElementById('navInfo').addEventListener('click', () => showPage('info'));
+        
         updateCalculations();
     </script>
 </body>
 </html>
+
